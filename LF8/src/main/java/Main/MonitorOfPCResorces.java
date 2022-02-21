@@ -22,6 +22,7 @@ public class MonitorOfPCResorces {
 	Timestamp Cpu_pecentage;
 	Timestamp memory;
 	public String OsName;
+	private double Ram_limt;
 	static OperatingSystemMXBean sunbean = (com.sun.management.OperatingSystemMXBean) ManagementFactory
 			.getOperatingSystemMXBean();
 
@@ -50,31 +51,39 @@ public class MonitorOfPCResorces {
 			Totaloftotals=Totaloftotals+totalspace;
 			TotaloffreeSpace = TotaloffreeSpace+freeSpace;
 			TotalofUsableSpace=TotalofUsableSpace+UsableSpace;
+			//TODO Adding Alert 
 		}
 		//System.out.println("Total of all System drives");
 		//System.out.printf("Total space: %8.2f GB\n",Totaloftotals);
 		//System.out.printf("Free Space : %8.2f GB \n",TotaloffreeSpace);
 		//System.out.printf("Usable Space: %8.2f GB \n",TotalofUsableSpace);
-
+		//TODO Adding ALERT for System Arlert
 		
 	}
 
 	public void OsInfo() {
-		String Arch = ManagementFactory.getOperatingSystemMXBean().getArch();
+		String arch = ManagementFactory.getOperatingSystemMXBean().getArch();
 		String OsName = ManagementFactory.getOperatingSystemMXBean().getName();
-		String OsVersion = ManagementFactory.getOperatingSystemMXBean().getVersion();
+		String osVersion = ManagementFactory.getOperatingSystemMXBean().getVersion();
 		this.OsName = OsName;
 	}
 
 	 public RAMUsage memoryinfo() {
 		double totalMemory=sunbean.getTotalPhysicalMemorySize()/GB;
 		double freeMemory = sunbean.getFreePhysicalMemorySize() / GB;
-		double usedMemory= totalMemory-freeMemory;
+		double usedMemory=totalMemory-freeMemory;
+		double memoryOnePercentage=totalMemory/100;
+		double memoryinPercentage= usedMemory/memoryOnePercentage;
+		if ( (totalMemory/100)*20<=usedMemory) {
+			//TODO ADD Email alert
+		}
+		System.out.printf("usedMemorySize:%8.2f\n" ,usedMemory);
 		System.out.printf("freeMemorySize:%8.2f GB\n", freeMemory);
 		System.out.printf("TotalMemorySize:%8.2f GB\n",totalMemory);
 		Instant now = Instant.now();
 		memory=Timestamp.from(now);
-		RAMUsage ram=new RAMUsage(memory, usedMemory);
+		RAMUsage ram=new RAMUsage(memory, memoryinPercentage);
+		
 		return ram;
 	}
 
@@ -107,6 +116,7 @@ public class MonitorOfPCResorces {
 		 cpuloadint = Integer.parseInt(Cpuloadpercentage);
 		System.out.println("Cpuload: " + Cpuloadpercentage + " %");
 		if (cpuloadint >= 80) {
+			//TODO Email Alert
 			System.out.println("Alert: Cpu is over 80%");
 
 		}}
