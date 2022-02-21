@@ -9,17 +9,17 @@ import javax.persistence.Entity;
 public class CPUUsage {
 	
 	private String timeInString;
-	private Double usage;
+	private int usage;
 	private Timestamp date;
 
-	public CPUUsage(Timestamp Date,double usage) {
+	public CPUUsage(Timestamp Date,int usage) {
 		this.usage = usage;
 		this.date = Date;
 		LocalDateTime localTime = Date.toLocalDateTime();
 		setTimeInString(localTime);
 	}
 	
-	public double getUsage() {
+	public int getUsage() {
 		return usage;
 	}
 	
@@ -32,7 +32,7 @@ public class CPUUsage {
 	}
 
 	private void setTimeInString(LocalDateTime localTime) {
-		this.timeInString = ""+localTime.getYear()+":"+localTime.getMonth()+":"+localTime.getDayOfMonth() +
+		this.timeInString = ""+localTime.getYear()+":"+localTime.getMonthValue()+":"+localTime.getDayOfMonth() +
 				":" + localTime.getHour() + ":" + localTime.getMinute() + ":" + localTime.getSecond();
 	}
 	

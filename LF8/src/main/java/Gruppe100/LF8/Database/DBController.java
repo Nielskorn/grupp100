@@ -24,7 +24,7 @@ public class DBController {
 		ResultSet resultSet = s.getResultSet();
 		while(resultSet.next())
 		{ 
-			CPUUsage resultObject = new CPUUsage(resultSet.getTimestamp("date"),resultSet.getDouble("usage"));
+			CPUUsage resultObject = new CPUUsage(resultSet.getTimestamp("date"),resultSet.getInt("usage"));
 			answer.add(resultObject);
 		}
 		c.close();

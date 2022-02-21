@@ -32,7 +32,7 @@ package Gruppe100.LF8.Database;
 		}
 
 		private void setTimeInString(LocalDateTime localTime) {
-			this.timeInString = ""+localTime.getYear()+":"+localTime.getMonth()+":"+localTime.getDayOfMonth() +
+			this.timeInString = ""+localTime.getYear()+":"+localTime.getMonthValue()+":"+localTime.getDayOfMonth() +
 					":" + localTime.getHour() + ":" + localTime.getMinute() + ":" + localTime.getSecond();
 		}
 		
