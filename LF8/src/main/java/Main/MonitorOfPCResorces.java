@@ -67,11 +67,11 @@ public class MonitorOfPCResorces {
 	}
 
 	 public RAMUsage memoryinfo() {
-		double totalMemory=sunbean.getTotalMemorySize()/GB;
-		double freeMemory = sunbean.getFreeMemorySize() / GB;
+		double totalMemory=sunbean.getTotalPhysicalMemorySize()/GB;
+		double freeMemory = sunbean.getFreePhysicalMemorySize() / GB;
 		double usedMemory= totalMemory-freeMemory;
-		//System.out.printf("freeMemorySize:%8.2f GB\n", freeMemory);
-		//System.out.printf("TotalMemorySize:%8.2f GB\n",totalMemory);
+		System.out.printf("freeMemorySize:%8.2f GB\n", freeMemory);
+		System.out.printf("TotalMemorySize:%8.2f GB\n",totalMemory);
 		Instant now = Instant.now();
 		memory=Timestamp.from(now);
 		RAMUsage ram=new RAMUsage(memory, usedMemory);
@@ -111,7 +111,7 @@ public class MonitorOfPCResorces {
 
 		}}
 		else {
-			sunbean.getCpuLoad();
+			sunbean.getSystemCpuLoad();
 		}		
 		Instant now = Instant.now();
 		Cpu_pecentage=Timestamp.from(now);

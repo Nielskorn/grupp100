@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import Gruppe100.LF8.Database.CPUUsage;
-import Gruppe100.LF8.Database.RAMUsage;
+import database.CPUUsage;
+import database.RAMUsage;
 import Main.MonitorOfPCResorces;
 
 public class TestMonitorOfPCResouces {
