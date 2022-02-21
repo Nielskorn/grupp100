@@ -5,9 +5,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import Gruppe100.LF8.Database.CPUUsage;
-import Gruppe100.LF8.Database.DBController;
-import Gruppe100.LF8.Database.RAMUsage;
+import database.CPUUsage;
+import database.DBController;
+import database.RAMUsage;
 
 public class DatabasePusher {
 	

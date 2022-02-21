@@ -1,4 +1,4 @@
-package Gruppe100.LF8.Database;
+package database;
 
 public class DatabaseProperties {
 	

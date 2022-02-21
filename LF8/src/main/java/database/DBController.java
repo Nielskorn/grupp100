@@ -1,4 +1,4 @@
-package Gruppe100.LF8.Database;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

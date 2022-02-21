@@ -7,25 +7,13 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-
 import DatabaseInteractors.DatabasePusher;
-import Gruppe100.LF8.Database.CPUUsage;
 import Webside.Application;
+import database.CPUUsage;
+import database.RAMUsage;
 
 @SpringBootTest(classes = Application.class)
 public class DatabaseTest {
@@ -46,7 +34,7 @@ public class DatabaseTest {
     }
     
     @Test
-    public void entryPushTest() {
+    public void entryPushTestCPUUsage() {
     	// create Expected CPUUsage
     	Instant now = Instant.now();
     	Timestamp timestamp = Timestamp.from(now);
@@ -60,6 +48,31 @@ public class DatabaseTest {
     	// check if it works as expected.
     	assertTrue(databaseEntries.size() == 1, "Too many Database Entries found: "+ databaseEntries.size());
     	CPUUsage databaseEntry = databaseEntries.get(0);
+    	assertEquals(usagePercentage,databaseEntry.getUsage(), "Wrong Percentage in Entry");
+    	LocalDateTime localTimeExpected = timestamp.toLocalDateTime();
+    	LocalDateTime localTimeActual = databaseEntry.getDate().toLocalDateTime();
+    	assertEquals(localTimeExpected.getYear(),localTimeActual.getYear());
+    	assertEquals(localTimeExpected.getMonth(),localTimeActual.getMonth());
+    	assertEquals(localTimeExpected.getDayOfMonth(),localTimeActual.getDayOfMonth());
+    	assertEquals(localTimeExpected.getHour(),localTimeActual.getHour());
+    	assertEquals(localTimeExpected.getMinute(),localTimeActual.getMinute());
+    	
+    }
+    @Test
+    public void entryPushTestRAMUsage() {
+    	// create Expected CPUUsage
+    	Instant now = Instant.now();
+    	Timestamp timestamp = Timestamp.from(now);
+    	double usagePercentage = 99.9;
+    	// clear Database
+    	DatabasePusher.cleanTables();
+    	// push Expected to Database
+    	DatabasePusher.pushRAMUsageToDatabase(usagePercentage, timestamp);
+    	// get Database Entries
+    	List<RAMUsage> databaseEntries = DatabasePusher.getRAMUsages();
+    	// check if it works as expected.
+    	assertTrue(databaseEntries.size() == 1, "Too many Database Entries found: "+ databaseEntries.size());
+    	RAMUsage databaseEntry = databaseEntries.get(0);
     	assertEquals(usagePercentage,databaseEntry.getUsage(), "Wrong Percentage in Entry");
     	LocalDateTime localTimeExpected = timestamp.toLocalDateTime();
     	LocalDateTime localTimeActual = databaseEntry.getDate().toLocalDateTime();
