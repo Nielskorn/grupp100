@@ -10,8 +10,8 @@ import java.time.Instant;
 
 import com.sun.management.OperatingSystemMXBean;
 
-import Gruppe100.LF8.Database.CPUUsage;
-import Gruppe100.LF8.Database.RAMUsage;
+import database.CPUUsage;
+import database.RAMUsage;
 
 public class MonitorOfPCResorces {
 	String cpuReadCommand = "CPU_Percentage.bat";
