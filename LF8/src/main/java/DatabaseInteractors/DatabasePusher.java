@@ -2,6 +2,8 @@ package DatabaseInteractors;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ import database.DBController;
 import database.RAMUsage;
 
 public class DatabasePusher {
+	
+	private static final String TIMECONDITION = "WHERE date < "; 
 	
 	public static void pushCPUUsageToDatabase(int usage, Timestamp date) {
 		CPUUsage cpuUsage = new CPUUsage(date, usage);
@@ -34,9 +38,13 @@ public class DatabasePusher {
 	}
 	
 	public static List<CPUUsage> getCPUUsages(){
+		return getCPUUsages("");
+	}
+	
+	public static List<CPUUsage> getCPUUsages(String condition){
 		ArrayList<CPUUsage> answer = new ArrayList<>();
 		try {
-		 answer = DBController.getCPUUsage("SELECT * FROM CPUUSAGE;");
+		 answer = DBController.getCPUUsage("SELECT * FROM CPUUSAGE "+condition+";");
 		
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -44,10 +52,26 @@ public class DatabasePusher {
 		return answer;
 	}
 	
+	public static List<RAMUsage> getRAMUsagesLastMinute(){
+		return getRAMUsages(TIMECONDITION + "'"+getTimeOfLastMinute()+"'" );
+	}
+	
+	public static List<CPUUsage> getCPUUsagesLastMinute(){
+		return getCPUUsages(TIMECONDITION + "'"+getTimeOfLastMinute()+"'" );
+	}
+	
+	private static Timestamp getTimeOfLastMinute () {
+		return Timestamp.from(Instant.now().minus(Duration.ofMinutes(1)));
+	}
+	
 	public static List<RAMUsage> getRAMUsages(){
+		return getRAMUsages("");
+	}
+	
+	public static List<RAMUsage> getRAMUsages(String condition){
 		ArrayList<RAMUsage> answer = new ArrayList<>();
 		try {
-		 answer = DBController.getRAMUsage("SELECT * FROM RAMUSAGE;");
+		 answer = DBController.getRAMUsage("SELECT * FROM RAMUSAGE "+condition+";");
 		
 		}catch(SQLException e) {
 			e.printStackTrace();
