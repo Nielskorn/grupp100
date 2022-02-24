@@ -17,5 +17,5 @@ deploy-job:
   stage: deploy
   script:
     - echo "Deploying application..."
-    only:
-       - main
+  only:
+    - main
