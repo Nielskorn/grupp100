@@ -6,6 +6,8 @@ stages:
 build-job:
   stage: build
   script:
+    - ls
+    - cd LF8
     - mvn package
 
 unit-test-job:
