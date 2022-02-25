@@ -8,7 +8,9 @@ build-job:
   script:
     - ls
     - cd LF8
-    - mvn package
+    - mvn -Dmaven.test.skip=true package
+  artifacts:
+    - *
 
 unit-test-job:
   stage: test
