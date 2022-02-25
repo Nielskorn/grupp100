@@ -18,32 +18,32 @@ public class DBController {
 	public static ArrayList<CPUUsage> getCPUUsage(String sqlRequest) throws SQLException
 	{
 		ArrayList<CPUUsage> answer = new ArrayList<>();
-		Connection c = connectToDB(DatabaseProperties.URL(),DatabaseProperties.USERNAME(),DatabaseProperties.PASSWORD());
-		Statement s = c.createStatement();
-		s.execute(sqlRequest);
-		ResultSet resultSet = s.getResultSet();
+		Connection connection = connectToDB(DatabaseProperties.URL(),DatabaseProperties.USERNAME(),DatabaseProperties.PASSWORD());
+		Statement sqlStatement = connection.createStatement();
+		sqlStatement.execute(sqlRequest);
+		ResultSet resultSet = sqlStatement.getResultSet();
 		while(resultSet.next())
 		{ 
 			CPUUsage resultObject = new CPUUsage(resultSet.getTimestamp("date"),resultSet.getInt("usage"));
 			answer.add(resultObject);
 		}
-		c.close();
+		connection.close();
 		return answer;
 	}
 	
 	public static ArrayList<RAMUsage> getRAMUsage(String sqlRequest) throws SQLException
 	{
 		ArrayList<RAMUsage> answer = new ArrayList<>();
-		Connection c = connectToDB(DatabaseProperties.URL(),DatabaseProperties.USERNAME(),DatabaseProperties.PASSWORD());
-		Statement s = c.createStatement();
-		s.execute(sqlRequest);
-		ResultSet resultSet = s.getResultSet();
+		Connection connection = connectToDB(DatabaseProperties.URL(),DatabaseProperties.USERNAME(),DatabaseProperties.PASSWORD());
+		Statement sqlStatement = connection.createStatement();
+		sqlStatement.execute(sqlRequest);
+		ResultSet resultSet = sqlStatement.getResultSet();
 		while(resultSet.next())
 		{ 
 			RAMUsage resultObject = new RAMUsage(resultSet.getTimestamp("date"),resultSet.getDouble("usage"));
 			answer.add(resultObject);
 		}
-		c.close();
+		connection.close();
 		return answer;
 	}
 	
