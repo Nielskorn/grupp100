@@ -22,7 +22,6 @@ public class MonitorOfPCResorces {
 	Timestamp Cpu_pecentage;
 	Timestamp memory;
 	public String OsName;
-	private double Ram_limt;
 	static OperatingSystemMXBean sunbean = (com.sun.management.OperatingSystemMXBean) ManagementFactory
 			.getOperatingSystemMXBean();
 
@@ -35,9 +34,9 @@ public class MonitorOfPCResorces {
 	}
 
 	 void drivespace() {
-		double Totaloftotals=0;
-		double TotaloffreeSpace=0;
-		double TotalofUsableSpace=0;
+		double totalOfTotals=0;
+		double totalOfFreeSpace=0;
+		double totalOfUsableSpace=0;
 		File[] listDrives = File.listRoots();
 		System.out.println("Listing System drives:");
 		for (File drive : listDrives) {
@@ -48,15 +47,15 @@ public class MonitorOfPCResorces {
 			//System.out.printf("Free Space: %8.2f GB\n", freeSpace);
 			double UsableSpace = drive.getUsableSpace() / GB;
 			//System.out.printf("Usable Space: %8.2f GB\n\n", UsableSpace);
-			Totaloftotals=Totaloftotals+totalspace;
-			TotaloffreeSpace = TotaloffreeSpace+freeSpace;
-			TotalofUsableSpace=TotalofUsableSpace+UsableSpace;
+			totalOfTotals=totalOfTotals+totalspace;
+			totalOfFreeSpace = totalOfFreeSpace+freeSpace;
+			totalOfUsableSpace=totalOfUsableSpace+UsableSpace;
 			//TODO Adding Alert 
 		}
 		//System.out.println("Total of all System drives");
-		//System.out.printf("Total space: %8.2f GB\n",Totaloftotals);
-		//System.out.printf("Free Space : %8.2f GB \n",TotaloffreeSpace);
-		//System.out.printf("Usable Space: %8.2f GB \n",TotalofUsableSpace);
+		//System.out.printf("Total space: %8.2f GB\n",totalOfTotals);
+		//System.out.printf("Free Space : %8.2f GB \n",totalOfFreeSpace);
+		//System.out.printf("Usable Space: %8.2f GB \n",totalOfUsableSpace);
 		//TODO Adding ALERT for System Arlert
 		
 	}
