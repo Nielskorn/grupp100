@@ -123,6 +123,7 @@ public class MonitorOfPCResorces {
 
 		}
 		}else {
+			System.out.println("CPU LOAD :" + sunbean.getSystemCpuLoad());
 			cpuloadDoubleLinux = sunbean.getSystemCpuLoad();
 		}		
 		cpuloadDoubleLinux = cpuloadDoubleLinux * 100;
