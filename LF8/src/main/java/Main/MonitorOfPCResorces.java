@@ -12,6 +12,7 @@ import com.sun.management.OperatingSystemMXBean;
 
 import database.CPUUsage;
 import database.RAMUsage;
+import datainterpretation.DiskSpaceDataAcceptor;
 
 public class MonitorOfPCResorces {
 	String cpuReadCommand = "CPU_Percentage.bat";
@@ -43,6 +44,7 @@ public class MonitorOfPCResorces {
 		System.out.println("Listing System drives:");
 		for (File drive : listDrives) {
 			//System.out.printf("Drive: %s\n", drive);
+			String name=drive;
 			double totalSpace = drive.getTotalSpace() / GB;
 			//System.out.printf("Total Space: %8.2f GB\n", totalSpace);
 			double freeSpace = drive.getFreeSpace() / GB;
@@ -53,6 +55,7 @@ public class MonitorOfPCResorces {
 			totalOfFreeSpace = totalOfFreeSpace+freeSpace;
 			totalOfUsableSpace=totalOfUsableSpace+UsableSpace;
 			//TODO Adding Alert 
+			DiskSpaceDataAcceptor.acceptDiskData(name, totalSpace, freeSpace);
 		}
 		//System.out.println("Total of all System drives");
 		//System.out.printf("Total space: %8.2f GB\n",totalOfTotals);
