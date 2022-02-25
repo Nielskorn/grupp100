@@ -22,8 +22,8 @@ public class MessagesSource {
 		
 	}
 	public  static String getformHashmap(String key){
-	String value=	hashdata.get(key);
-	return value;
+		String value=	hashdata.get(key);
+		return value;
 	}
 	
 	

@@ -18,7 +18,9 @@ public void Cpuload() {
 	mon.OsInfo();
 	cpuUsage=mon.getCpuload(mon.OsName);
 	assertNotNull(cpuUsage.getDate());
+	System.out.println(cpuUsage.getUsage());
 	assertTrue(cpuUsage.getUsage()>=0);
+
 }
 @Test 
 void Ramload() {

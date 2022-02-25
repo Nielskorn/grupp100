@@ -12,10 +12,10 @@ public class CPUUsage {
 	private int usage;
 	private Timestamp date;
 
-	public CPUUsage(Timestamp Date,int usage) {
+	public CPUUsage(Timestamp date,int usage) {
 		this.usage = usage;
-		this.date = Date;
-		LocalDateTime localTime = Date.toLocalDateTime();
+		this.date =date;
+		LocalDateTime localTime = date.toLocalDateTime();
 		setTimeInString(localTime);
 	}
 	

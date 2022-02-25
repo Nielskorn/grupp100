@@ -7,7 +7,8 @@ import database.CPUUsage;
 import utils.MessagesSource;
 
 public class CPUUsageAnalyser {
-	static int alertValue;
+
+	
 	public static void analyseDatabase() {
 		List<CPUUsage> cpuUsages = DatabasePusher.getCPUUsagesLastMinute();
 		int sumOfPercentages = 0;;
@@ -16,17 +17,16 @@ public class CPUUsageAnalyser {
 			sumOfPercentages += cpuUsage.getUsage();
 			counter++;
 			if(cpuUsage.getUsage() > Thresholds.CPUHARDCAP)
-				alertValue=cpuUsage.getUsage();
-				cpuAlert();
+				cpuAlert(cpuUsage.getUsage());
 		}
 		int mean = 0;
 		if(counter != 0)
 			mean = sumOfPercentages/counter;
 		if(mean > Thresholds.CPUSOFTCAP)
-			cpuAlert();
+			cpuAlert(mean);
 	}
 
-	public static void cpuAlert() {
+	public static void cpuAlert(int alertValue) {
 		String message;
 		message=MessagesSource.getformHashmap("alert")+" ";
 		message=message+MessagesSource.getformHashmap("cpu");

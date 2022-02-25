@@ -12,7 +12,6 @@ import service.EMailSenderService;
 import utils.MessagesSource;
 
 public class RAMUsageAnalyser {
-	static double alertValue;
 	
 	public static void analyseDatabase() {
 		List<RAMUsage> ramUsages = DatabasePusher.getRAMUsagesLastMinute();
@@ -22,14 +21,13 @@ public class RAMUsageAnalyser {
 			sumOfPercentages += ramUsage.getUsage();
 			counter++;
 			if(ramUsage.getUsage() > Thresholds.RAMHARDCAP)
-				alertValue= ramUsage.getUsage();
-				ramAlert(alertValue);
+				ramAlert(ramUsage.getUsage());
 		}
 		double mean = 0;
 		if(counter != 0)
 			mean = sumOfPercentages/counter;
 		if(mean > Thresholds.RAMSOFTCAP)
-			ramAlert(alertValue);
+			ramAlert(mean);
 	}
 
 	public static void ramAlert(double alertValue )  {

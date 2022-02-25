@@ -15,7 +15,7 @@ import database.RAMUsage;
 
 public class MonitorOfPCResorces {
 	String cpuReadCommand = "CPU_Percentage.bat";
-	static double GB = 1024D * 1024D * 1024D;
+	static double GB = 1024 * 1024 * 1024;
 	// Format drive space as per your need
 	// double MB = 1024D * 1024D;
 	// double KB = 1024D;
@@ -93,11 +93,12 @@ public class MonitorOfPCResorces {
 
 		if (OsName.toLowerCase().contains("windows")) {
 			cpuUsageAsInt = getCpuLoadWindows();
-		}else {
-			System.out.println("CPU LOAD :" + sunbean.getSystemCpuLoad());
+		}else {		
 			cpuUsageAsDoubleForLinux = sunbean.getSystemCpuLoad();
+			System.out.println("CPU LOAD :" + cpuUsageAsDoubleForLinux);
 			cpuUsageAsDoubleForLinux = cpuUsageAsDoubleForLinux * 100;
 			cpuUsageAsInt = (int) Math.round(cpuUsageAsDoubleForLinux);
+			System.out.println("Usage as Int: "+cpuUsageAsInt);
 		}		
 		Instant now = Instant.now();
 		cpuUsageTimestamp=Timestamp.from(now);

@@ -12,10 +12,10 @@ package database;
 		private Double usage;
 		private Timestamp date;
 
-		public RAMUsage(Timestamp Date,double usage) {
+		public RAMUsage(Timestamp date,double usage) {
 			this.usage = usage;
-			this.date = Date;
-			LocalDateTime localTime = Date.toLocalDateTime();
+			this.date = date;
+			LocalDateTime localTime = date.toLocalDateTime();
 			setTimeInString(localTime);
 		}
 		
