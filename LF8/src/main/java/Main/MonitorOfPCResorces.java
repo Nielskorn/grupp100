@@ -44,7 +44,7 @@ public class MonitorOfPCResorces {
 		System.out.println("Listing System drives:");
 		for (File drive : listDrives) {
 			//System.out.printf("Drive: %s\n", drive);
-			String name=drive;
+			String name=drive.getName();
 			double totalSpace = drive.getTotalSpace() / GB;
 			//System.out.printf("Total Space: %8.2f GB\n", totalSpace);
 			double freeSpace = drive.getFreeSpace() / GB;
