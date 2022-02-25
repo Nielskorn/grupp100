@@ -19,8 +19,10 @@ public class MonitorOfPCResorces {
 	// Format drive space as per your need
 	// double MB = 1024D * 1024D;
 	// double KB = 1024D;
-	Timestamp Cpu_pecentage;
-	Timestamp memory;
+	Timestamp cpuUsageTimestamp;
+	Timestamp memoryUsageTimestamp;
+	
+	
 	public String OsName;
 	static OperatingSystemMXBean sunbean = (com.sun.management.OperatingSystemMXBean) ManagementFactory
 			.getOperatingSystemMXBean();
@@ -41,13 +43,13 @@ public class MonitorOfPCResorces {
 		System.out.println("Listing System drives:");
 		for (File drive : listDrives) {
 			//System.out.printf("Drive: %s\n", drive);
-			double totalspace = drive.getTotalSpace() / GB;
-			//System.out.printf("Total Space: %8.2f GB\n", totalspace);
+			double totalSpace = drive.getTotalSpace() / GB;
+			//System.out.printf("Total Space: %8.2f GB\n", totalSpace);
 			double freeSpace = drive.getFreeSpace() / GB;
 			//System.out.printf("Free Space: %8.2f GB\n", freeSpace);
 			double UsableSpace = drive.getUsableSpace() / GB;
 			//System.out.printf("Usable Space: %8.2f GB\n\n", UsableSpace);
-			totalOfTotals=totalOfTotals+totalspace;
+			totalOfTotals=totalOfTotals+totalSpace;
 			totalOfFreeSpace = totalOfFreeSpace+freeSpace;
 			totalOfUsableSpace=totalOfUsableSpace+UsableSpace;
 			//TODO Adding Alert 
@@ -72,65 +74,63 @@ public class MonitorOfPCResorces {
 		double freeMemory = sunbean.getFreePhysicalMemorySize() / GB;
 		double usedMemory=totalMemory-freeMemory;
 		double memoryOnePercentage=totalMemory/100;
-		double memoryinPercentage= usedMemory/memoryOnePercentage;
-		if ( (totalMemory/100)*20<=usedMemory) {
-			//TODO ADD Email alert
-		}
+		double memoryInPercentage= usedMemory/memoryOnePercentage;
+		
 		System.out.printf("usedMemorySize:%8.2f\n" ,usedMemory);
 		System.out.printf("freeMemorySize:%8.2f GB\n", freeMemory);
 		System.out.printf("TotalMemorySize:%8.2f GB\n",totalMemory);
 		Instant now = Instant.now();
-		memory=Timestamp.from(now);
-		RAMUsage ram=new RAMUsage(memory, memoryinPercentage);
+		memoryUsageTimestamp=Timestamp.from(now);
+		RAMUsage ram=new RAMUsage(memoryUsageTimestamp, memoryInPercentage);
 		
 		return ram;
 	}
 
 	public CPUUsage getCpuload(String OsName) {
-		double cpuloadDoubleLinux = 0;
-		int cpuloadint=0;
-		Process CpuRead = null;
-		String Cpuloadpercentage = null;
+		double cpuUsageAsDoubleForLinux = 0;
+		int cpuUsageAsInt=0;
+		
+
 		if (OsName.toLowerCase().contains("windows")) {
+			cpuUsageAsInt = getCpuLoadWindows();
+		}else {
+			System.out.println("CPU LOAD :" + sunbean.getSystemCpuLoad());
+			cpuUsageAsDoubleForLinux = sunbean.getSystemCpuLoad();
+			cpuUsageAsDoubleForLinux = cpuUsageAsDoubleForLinux * 100;
+			cpuUsageAsInt = (int) Math.round(cpuUsageAsDoubleForLinux);
+		}		
+		Instant now = Instant.now();
+		cpuUsageTimestamp=Timestamp.from(now);
+		CPUUsage CpuUsage=new CPUUsage(cpuUsageTimestamp,cpuUsageAsInt);
+		return CpuUsage;
+	}
+	
+	private int getCpuLoadWindows() {
+		String cpuUsagePercentageAsString = null;
+		Process cpuRead = null;
 		if (new File("CPU_Percentage.bat").exists()) {
 			try {
-				CpuRead = Runtime.getRuntime().exec(cpuReadCommand);
+				cpuRead = Runtime.getRuntime().exec(cpuReadCommand);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
+			
 			}
 
 		}
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(CpuRead.getInputStream()));
-		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(cpuRead.getInputStream()));
+	
 		try {
 			for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 				if (!line.isBlank())
-					Cpuloadpercentage = line;
+					cpuUsagePercentageAsString = line;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Cpuloadpercentage = Cpuloadpercentage.strip();
-		 cpuloadint = Integer.parseInt(Cpuloadpercentage);
-		System.out.println("Cpuload: " + Cpuloadpercentage + " %");
-		if (cpuloadint >= 80) {
-			//TODO Email Alert
-			System.out.println("Alert: Cpu is over 80%");
-
-		}
-		}else {
-			System.out.println("CPU LOAD :" + sunbean.getSystemCpuLoad());
-			cpuloadDoubleLinux = sunbean.getSystemCpuLoad();
-		}		
-		cpuloadDoubleLinux = cpuloadDoubleLinux * 100;
-		if(cpuloadDoubleLinux > 1)
-			cpuloadint = (int) Math.round(cpuloadDoubleLinux);
-		Instant now = Instant.now();
-		Cpu_pecentage=Timestamp.from(now);
-		CPUUsage CpuUsage=new CPUUsage(Cpu_pecentage,cpuloadint);
-		return CpuUsage;
+		cpuUsagePercentageAsString = cpuUsagePercentageAsString.strip();
+		return Integer.parseInt(cpuUsagePercentageAsString);
+		
 	}
 }
