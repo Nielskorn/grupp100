@@ -72,7 +72,7 @@ public class EMailSenderService {
 	 *                 emails and sends them
 	 */
 
-	public void send(String fromMail, String from, String receiver, String subject, String message)
+	public void send(String fromMail, String personalName, String receiver, String subject, String message)
 			throws MessagingException, UnsupportedEncodingException {
 		if (mailSesion == null) {
 			throw new IllegalStateException("nicht eingelogt");
@@ -81,7 +81,7 @@ public class EMailSenderService {
 		MimeBodyPart body = new MimeBodyPart();
 		body.setContent(message, "text/html; charset=utf-8");
 
-		msg.setFrom(new InternetAddress(fromMail, from));
+		msg.setFrom(new InternetAddress(fromMail, personalName));
 		msg.setReplyTo(InternetAddress.parse(fromMail, false));
 		msg.setSubject(subject);
 		Multipart multipart = new MimeMultipart();

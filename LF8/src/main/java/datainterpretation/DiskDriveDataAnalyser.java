@@ -2,8 +2,10 @@ package datainterpretation;
 
 import java.util.List;
 
+import utils.MessagesSource;
+
 public class DiskDriveDataAnalyser {
-	
+	static double alertValue;
 	public static void analyseData() {
 		double totalSpace = 0;
 		double usedSpace = 0;
@@ -27,12 +29,20 @@ public class DiskDriveDataAnalyser {
 
 	private static void diskTotalSoftAlert() {
 		// TODO Auto-generated method stub
-		
+		String message;
+		message=MessagesSource.getformHashmap("alert")+" ur system";
+		message=message+MessagesSource.getformHashmap("softcapDisk");
+		message=message+alertValue+"\n";
+		message=message+MessagesSource.getformHashmap("bye");
 	}
 
 	private static void diskTotalHardAlert() {
 		// TODO Auto-generated method stub
-		
+		String message;
+		message=MessagesSource.getformHashmap("alert")+" ur system";
+		message=message+MessagesSource.getformHashmap("hardcapDisk");
+		message=message+alertValue+"\n";
+		message=message+MessagesSource.getformHashmap("bye");
 	}
 
 }
