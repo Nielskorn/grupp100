@@ -4,6 +4,7 @@ import java.util.List;
 
 import DatabaseInteractors.DatabasePusher;
 import database.CPUUsage;
+import service.EMailSenderService;
 import utils.MessagesSource;
 
 public class CPUUsageAnalyser {
@@ -28,9 +29,13 @@ public class CPUUsageAnalyser {
 
 	public static void cpuAlert() {
 		String message;
+		String subject="CpuAlert";
 		message=MessagesSource.getformHashmap("alert")+" ";
 		message=message+MessagesSource.getformHashmap("cpu");
 		message=message+alertValue+"% \n";
 		message=message+MessagesSource.getformHashmap("bye");
+		EMailSenderService cpusender=new EMailSenderService();
+		cpusender.sendAlert(subject,message);
+		
 	}
 }
