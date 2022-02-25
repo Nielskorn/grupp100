@@ -11,7 +11,7 @@ build-job:
     - mvn -Dmaven.test.skip=true package
   artifacts:
     paths:
-        - *
+        - .
 
 unit-test-job:
   stage: test
