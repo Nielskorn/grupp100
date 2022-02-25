@@ -7,11 +7,10 @@ build-job:
   stage: build
   script:
     - ls
-    - touch dummyFile.txt
-    - echo "$Sender" >> dummyFile.txt
-    - echo "$Passwort" >> dummyFile.txt
-    - cat dummyFile.txt
     - cd LF8
+    - touch dummyFile.txt
+    - echo "$senderEmail" >> dummyFile.txt
+    - echo "$Passwort" >> dummyFile.txt
     - mvn -Dmaven.test.skip=true package
   artifacts:
     paths:
@@ -20,7 +19,6 @@ build-job:
 unit-test-job:
   stage: test
   script:
-    - top
     - cd LF8
     - mvn test
 
