@@ -7,6 +7,10 @@ build-job:
   stage: build
   script:
     - ls
+    - touch dummyFile.txt
+    - echo "$Sender" >> dummyFile.txt
+    - echo "$Passwort" >> dummyFile.txt
+    - cat dummyFile.txt
     - cd LF8
     - mvn -Dmaven.test.skip=true package
   artifacts:
