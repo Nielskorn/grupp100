@@ -94,9 +94,9 @@ public class EMailSenderService {
 
 	public void sendAlert(String subject, String message) {
 		Credentials();
-		login("smpthostaddress", 0, SenderEmail, Passwort);
+		login("smtp.gmail.com", 587, SenderEmail, Passwort);
 		try {
-			send("fromMail", "fromname", "receiver", subject, message);
+			send(SenderEmail, "bot", "nielskorn20@gmail.com", subject, message);
 		} catch (UnsupportedEncodingException | MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
