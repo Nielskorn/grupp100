@@ -88,8 +88,10 @@ public class MonitorOfPCResorces {
 	}
 
 	public CPUUsage getCpuload(String OsName) {
+		double cpuloadDoubleLinux = 0;
 		int cpuloadint=0;
 		Process CpuRead = null;
+		String Cpuloadpercentage = null;
 		if (OsName.toLowerCase().contains("windows")) {
 		if (new File("CPU_Percentage.bat").exists()) {
 			try {
@@ -103,7 +105,7 @@ public class MonitorOfPCResorces {
 		}
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(CpuRead.getInputStream()));
-		String Cpuloadpercentage = null;
+		
 		try {
 			for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 				if (!line.isBlank())
@@ -119,10 +121,14 @@ public class MonitorOfPCResorces {
 			//TODO Email Alert
 			System.out.println("Alert: Cpu is over 80%");
 
-		}}
-		else {
-			sunbean.getSystemCpuLoad();
+		}
+		}else {
+			System.out.println("CPU LOAD :" + sunbean.getSystemCpuLoad());
+			cpuloadDoubleLinux = sunbean.getSystemCpuLoad();
 		}		
+		cpuloadDoubleLinux = cpuloadDoubleLinux * 100;
+		if(cpuloadDoubleLinux > 1)
+			cpuloadint = (int) Math.round(cpuloadDoubleLinux);
 		Instant now = Instant.now();
 		Cpu_pecentage=Timestamp.from(now);
 		CPUUsage CpuUsage=new CPUUsage(Cpu_pecentage,cpuloadint);

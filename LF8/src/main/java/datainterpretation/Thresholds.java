@@ -12,5 +12,4 @@ public class Thresholds {
 	public static double DISKSPACEOVERALLSOFTCAP = 80;
 	public static double DISKSPACEOVERALLHARDCAP = 90;
 
-
 }

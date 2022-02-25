@@ -1,0 +1,37 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - ls
+    - cd LF8
+    - touch dummyFile.txt
+    - echo "$senderEmail" >> dummyFile.txt
+    - echo "$Passwort" >> dummyFile.txt
+    - mvn compile
+  artifacts:
+    paths:
+        - LF8
+    expire_in: 1 hrs
+
+unit-test-job:
+  stage: test
+  script:
+    - cd LF8
+    - mvn test
+
+deploy-job:      
+  stage: deploy
+  script:
+    - echo "Deploying application..."
+    - cd LF8
+    - mvn -Dmaven.test.skip=true package
+  artifacts:
+    paths:
+      - LF8/target/
+    expire_in: 1 day
+  only:
+    - main
