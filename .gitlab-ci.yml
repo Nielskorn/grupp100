@@ -11,11 +11,12 @@ build-job:
     - mvn -Dmaven.test.skip=true package
   artifacts:
     paths:
-        - .
+        - /LF8
 
 unit-test-job:
   stage: test
   script:
+    - cd LF8
     - mvn test
 
 deploy-job:      
