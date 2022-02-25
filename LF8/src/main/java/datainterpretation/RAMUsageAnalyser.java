@@ -30,17 +30,18 @@ public class RAMUsageAnalyser {
 			ramAlert(mean);
 	}
 
+
 	public static void ramAlert(double alertValue )  {
 		try {
 			String message;
+			String subject="Ram Alert";
 			message=MessagesSource.getformHashmap("alert")+" ";
 			message=message+MessagesSource.getformHashmap("ram");
 			message=message+alertValue+"% \n";
 			message=message+MessagesSource.getformHashmap("bye");
 			System.out.println(message);
 			EMailSenderService sender=new EMailSenderService();
-			sender.login("emailProvidersmtp", 0,"Senderemail","Passwort");
-			sender.send("Senderemail","nameofsende","reciver1email,reciver2email","Alert Ram usage", message);
+			sender.sendAlert(subject,message);
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("Could not send mail");
