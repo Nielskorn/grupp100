@@ -16,6 +16,7 @@ build-job:
 unit-test-job:
   stage: test
   script:
+    - top
     - cd LF8
     - mvn test
 
