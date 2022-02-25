@@ -27,6 +27,7 @@ deploy-job:
   stage: deploy
   script:
     - echo "Deploying application..."
+    - cd LF8
     - mvn -Dmaven.test.skip=true package
   artifacts:
     paths:
