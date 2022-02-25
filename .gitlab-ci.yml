@@ -20,6 +20,7 @@ unit-test-job:
   stage: test
   script:
     - cd LF8
+    - cat dummyFile.txt
     - mvn test
 
 deploy-job:      
