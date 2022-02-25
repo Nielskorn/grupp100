@@ -11,21 +11,26 @@ build-job:
     - touch dummyFile.txt
     - echo "$senderEmail" >> dummyFile.txt
     - echo "$Passwort" >> dummyFile.txt
-    - mvn -Dmaven.test.skip=true package
+    - mvn compile
   artifacts:
     paths:
         - LF8
+    expire_in: 1 hrs
 
 unit-test-job:
   stage: test
   script:
     - cd LF8
-    - cat dummyFile.txt
     - mvn test
 
 deploy-job:      
   stage: deploy
   script:
     - echo "Deploying application..."
+    - mvn -Dmaven.test.skip=true package
+  artifacts:
+    paths:
+      - LF8/target/
+    expire_in: 1 day
   only:
     - main
