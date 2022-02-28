@@ -38,7 +38,7 @@ public class MonitorOfPCResorces {
 		MonitorOfPCResorces mon = new MonitorOfPCResorces();
 		mon.memoryinfo();
 		mon.OsInfo();
-		mon.getCpuload(mon.OsName);
+		mon.getCpuload();
 		mon.drivespace();
 	}
 
@@ -100,19 +100,20 @@ public class MonitorOfPCResorces {
 			for(Cpu cpu:cpus){
 				if(cpus.size()>1) {
 					List<Load> loads = cpu.sensors.loads;
-					for (Load indLoad : loads) {
-					if (indLoad.name.matches("Load CPU Total")){
-					cpuperantage=cpuperantage+indLoad.value.intValue();
-					}	
-				}
+					for (Load ind2Load : loads) {
+					if (ind2Load.name.matches("Load CPU Total")){
+					cpuperantage=cpuperantage+ind2Load.value.intValue();
+					}}}	
+				
 				else {
 			List<Load> loads = cpu.sensors.loads;
-			for (Load indLoad : loads) {
+			loads = cpu.sensors.loads;
+			for ( Load indLoad : loads) {
 			if (indLoad.name.matches("Load CPU Total")){
 			cpuperantage= indLoad.value.intValue();
-			}	
+			}}	
 			}
-			}}
+			}
 			Instant now = Instant.now();
 			cpuUsageTimestamp=Timestamp.from(now);
 			CPUUsage CpuUsage=new CPUUsage(cpuUsageTimestamp,cpuperantage);
@@ -130,10 +131,11 @@ public class MonitorOfPCResorces {
 				//}
 
 			}
+			
 	 
 
 
 	
 }
 
-}
+
