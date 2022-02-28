@@ -7,7 +7,12 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 
+import com.profesorfalken.jsensors.JSensors;
+import com.profesorfalken.jsensors.model.components.Components;
+import com.profesorfalken.jsensors.model.components.Cpu;
+import com.profesorfalken.jsensors.model.sensors.Load;
 import com.sun.management.OperatingSystemMXBean;
 
 import database.CPUUsage;
@@ -17,6 +22,7 @@ import datainterpretation.DiskSpaceDataAcceptor;
 public class MonitorOfPCResorces {
 	String cpuReadCommand = "CPU_Percentage.bat";
 	static double GB = 1024 * 1024 * 1024;
+	JSensors jsen =JSensors.get;
 	// Format drive space as per your need
 	// double MB = 1024D * 1024D;
 	// double KB = 1024D;
@@ -41,7 +47,7 @@ public class MonitorOfPCResorces {
 		double totalOfFreeSpace=0;
 		double totalOfUsableSpace=0;
 		File[] listDrives = File.listRoots();
-		System.out.println("Listing System drives:");
+		//System.out.println("Listing System drives:");
 		for (File drive : listDrives) {
 			//System.out.printf("Drive: %s\n", drive);
 			String name=drive.getName();
@@ -88,6 +94,35 @@ public class MonitorOfPCResorces {
 		
 		return ram;
 	}
+	 public CPUUsage getcpuloadexp() {
+			List<Cpu> cpus =jsen.components().cpus;
+			int cpuperantage=0;
+			for(Cpu cpu:cpus){
+			List<Load> loads = cpu.sensors.loads;
+			for (Load indLoad : loads) {
+			if (indLoad.name.matches("Load CPU Total")){
+			cpuperantage= indLoad.value.intValue();
+			}	
+			}
+			}
+			Instant now = Instant.now();
+			cpuUsageTimestamp=Timestamp.from(now);
+			CPUUsage CpuUsage=new CPUUsage(cpuUsageTimestamp,cpuperantage);
+			return CpuUsage;
+			//String cpuUsagePercentageAsString = null;
+			//Process cpuRead = null;
+			//if (new File("CPU_Percentage.bat").exists()) {
+				//try {
+					//cpuRead = Runtime.getRuntime().exec(cpuReadCommand);
+				//} catch (IOException e) {
+					//// TODO Auto-generated catch block
+				//	e.printStackTrace();
+			//return cpuperantage;
+				
+				//}
+
+			}
+	 
 
 	public CPUUsage getCpuload(String OsName) {
 		double cpuUsageAsDoubleForLinux = 0;
@@ -110,20 +145,31 @@ public class MonitorOfPCResorces {
 	}
 	
 	private int getCpuLoadWindows() {
-		String cpuUsagePercentageAsString = null;
-		Process cpuRead = null;
-		if (new File("CPU_Percentage.bat").exists()) {
-			try {
-				cpuRead = Runtime.getRuntime().exec(cpuReadCommand);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		List<Cpu> cpus =jsen.components().cpus;
+		int cpuperantage=0;
+		for(Cpu cpu:cpus){
+		List<Load> loads = cpu.sensors.loads;
+		for (Load indLoad : loads) {
+		if (indLoad.name.matches("Load CPU Total")){
+		cpuperantage= indLoad.value.intValue();
+		}	
+		}
+		}
+		//String cpuUsagePercentageAsString = null;
+		//Process cpuRead = null;
+		//if (new File("CPU_Percentage.bat").exists()) {
+			//try {
+				//cpuRead = Runtime.getRuntime().exec(cpuReadCommand);
+			//} catch (IOException e) {
+				//// TODO Auto-generated catch block
+			//	e.printStackTrace();
+		return cpuperantage;
 			
-			}
+			//}
 
 		}
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(cpuRead.getInputStream()));
+	/*	BufferedReader reader = new BufferedReader(new InputStreamReader(cpuRead.getInputStream()));
 	
 		try {
 			for (String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -136,5 +182,5 @@ public class MonitorOfPCResorces {
 		cpuUsagePercentageAsString = cpuUsagePercentageAsString.strip();
 		return Integer.parseInt(cpuUsagePercentageAsString);
 		
-	}
+	}*/
 }
