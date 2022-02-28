@@ -94,17 +94,25 @@ public class MonitorOfPCResorces {
 		
 		return ram;
 	}
-	 public CPUUsage getcpuloadexp() {
+	 public CPUUsage getCpuload() {
 			List<Cpu> cpus =jsen.components().cpus;
 			int cpuperantage=0;
 			for(Cpu cpu:cpus){
+				if(cpus.size()>1) {
+					List<Load> loads = cpu.sensors.loads;
+					for (Load indLoad : loads) {
+					if (indLoad.name.matches("Load CPU Total")){
+					cpuperantage=cpuperantage+indLoad.value.intValue();
+					}	
+				}
+				else {
 			List<Load> loads = cpu.sensors.loads;
 			for (Load indLoad : loads) {
 			if (indLoad.name.matches("Load CPU Total")){
 			cpuperantage= indLoad.value.intValue();
 			}	
 			}
-			}
+			}}
 			Instant now = Instant.now();
 			cpuUsageTimestamp=Timestamp.from(now);
 			CPUUsage CpuUsage=new CPUUsage(cpuUsageTimestamp,cpuperantage);
@@ -124,63 +132,8 @@ public class MonitorOfPCResorces {
 			}
 	 
 
-	public CPUUsage getCpuload(String OsName) {
-		double cpuUsageAsDoubleForLinux = 0;
-		int cpuUsageAsInt=0;
-		
 
-		if (OsName.toLowerCase().contains("windows")) {
-			cpuUsageAsInt = getCpuLoadWindows();
-		}else {		
-			cpuUsageAsDoubleForLinux = sunbean.getSystemCpuLoad();
-			System.out.println("CPU LOAD :" + cpuUsageAsDoubleForLinux);
-			cpuUsageAsDoubleForLinux = cpuUsageAsDoubleForLinux * 100;
-			cpuUsageAsInt = (int) Math.round(cpuUsageAsDoubleForLinux);
-			System.out.println("Usage as Int: "+cpuUsageAsInt);
-		}		
-		Instant now = Instant.now();
-		cpuUsageTimestamp=Timestamp.from(now);
-		CPUUsage CpuUsage=new CPUUsage(cpuUsageTimestamp,cpuUsageAsInt);
-		return CpuUsage;
-	}
 	
-	private int getCpuLoadWindows() {
-		List<Cpu> cpus =jsen.components().cpus;
-		int cpuperantage=0;
-		for(Cpu cpu:cpus){
-		List<Load> loads = cpu.sensors.loads;
-		for (Load indLoad : loads) {
-		if (indLoad.name.matches("Load CPU Total")){
-		cpuperantage= indLoad.value.intValue();
-		}	
-		}
-		}
-		//String cpuUsagePercentageAsString = null;
-		//Process cpuRead = null;
-		//if (new File("CPU_Percentage.bat").exists()) {
-			//try {
-				//cpuRead = Runtime.getRuntime().exec(cpuReadCommand);
-			//} catch (IOException e) {
-				//// TODO Auto-generated catch block
-			//	e.printStackTrace();
-		return cpuperantage;
-			
-			//}
+}
 
-		}
-
-	/*	BufferedReader reader = new BufferedReader(new InputStreamReader(cpuRead.getInputStream()));
-	
-		try {
-			for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-				if (!line.isBlank())
-					cpuUsagePercentageAsString = line;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		cpuUsagePercentageAsString = cpuUsagePercentageAsString.strip();
-		return Integer.parseInt(cpuUsagePercentageAsString);
-		
-	}*/
 }
