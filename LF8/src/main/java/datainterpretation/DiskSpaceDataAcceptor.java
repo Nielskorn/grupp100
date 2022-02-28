@@ -18,12 +18,12 @@ public class DiskSpaceDataAcceptor {
 		
 	}
 
-	private static void individualDriveSoftAlert(String diskDriveName,double usage) {
+	public static void individualDriveSoftAlert(String diskDriveName,double usage) {
 		// TODO Auto-generated method stub
 		try {
 			String message;
 			String subject="Diskspace alert for"+diskDriveName;
-			message=MessagesSource.getformHashmap("alert")+" ";
+			message=MessagesSource.getformHashmap("alert")+" "+"drive:"+diskDriveName;
 			message=message+MessagesSource.getformHashmap("softcapDisk");
 			message=message+usage+"% \n";
 			message=message+MessagesSource.getformHashmap("bye");
@@ -39,14 +39,14 @@ public class DiskSpaceDataAcceptor {
 		
 	
 
-	private static void individualDriveHardAlert(String diskDriveName,double usage) {
+	public static void individualDriveHardAlert(String diskDriveName,double usage) {
 		// TODO Auto-generated method stub
 		try {
 			String message;
-			String subject="Diskspace alert for"+diskDriveName;
-			message=MessagesSource.getformHashmap("alert")+" ";
+			String subject="Diskspace alert for "+diskDriveName;
+			message=MessagesSource.getformHashmap("alert")+" "+"drive:"+diskDriveName;
 			message=message+MessagesSource.getformHashmap("softcapDisk");
-			message=message+usage+"% \n";
+			message=message+" "+usage+"% \n";
 			message=message+MessagesSource.getformHashmap("bye");
 			System.out.println(message);
 			EMailSenderService sender=new EMailSenderService();
