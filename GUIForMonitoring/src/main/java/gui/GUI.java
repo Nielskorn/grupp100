@@ -19,6 +19,7 @@ import servercommunication.Communicator;
 
 public class GUI extends JFrame {
   // GUI Visual fields
+  // Anfang Attribute
   private JTextField enterThresholdValue = new JTextField();
   private JComboBox<String> chooseThresholdType = new JComboBox<String>();
   private DefaultComboBoxModel<String> modelForThresholdChoice = new DefaultComboBoxModel<String>();
@@ -49,6 +50,7 @@ public class GUI extends JFrame {
   private JLabel connectionErrorLabel = new JLabel();
   // GUI functional fields
   private Communicator serverConnection;
+  // Ende Attribute
   
   public GUI() { 
     // Frame-Initialisierung
@@ -163,54 +165,54 @@ public class GUI extends JFrame {
   }
   
   private void urlInputScreen(boolean visible) {
-	  serverUrlConfirm.setVisible(visible);
-	  serverUrlDescription.setVisible(visible);
-	  serverUrlInputField.setVisible(visible);
-	  connectionErrorLabel.setVisible(visible);
+    serverUrlConfirm.setVisible(visible);
+    serverUrlDescription.setVisible(visible);
+    serverUrlInputField.setVisible(visible);
+    connectionErrorLabel.setVisible(visible);
   }
   
   private void monitoringScreen(boolean visible) {
-	  cpuGraphVisible(visible);
-	  ramGraphVisible(visible);
-	  diskDriveMonitorVisible(visible);
-	  thresholdInputVisible(visible);
-	  dataUpdateFrequencyVisible(visible);
+    cpuGraphVisible(visible);
+    ramGraphVisible(visible);
+    diskDriveMonitorVisible(visible);
+    thresholdInputVisible(visible);
+    dataUpdateFrequencyVisible(visible);
   }
   
   private void dataUpdateFrequencyVisible(boolean visible) {
-	  dataUpdateFrequencySelector.setVisible(visible);
-	  dataUpdateFrequencyDescription.setVisible(visible);
+    dataUpdateFrequencySelector.setVisible(visible);
+    dataUpdateFrequencyDescription.setVisible(visible);
   }
   
   private void thresholdInputVisible(boolean visible) {
-	  enterThresholdValue.setVisible(visible);
-	  chooseThresholdType.setVisible(visible);
-	  confirmThresholdUpdate.setVisible(visible);
-	  thresholdSelectionDescription.setVisible(visible);
-	  enterThresholdDescription.setVisible(visible);
+    enterThresholdValue.setVisible(visible);
+    chooseThresholdType.setVisible(visible);
+    confirmThresholdUpdate.setVisible(visible);
+    thresholdSelectionDescription.setVisible(visible);
+    enterThresholdDescription.setVisible(visible);
   }
   
   private void diskDriveMonitorVisible(boolean visible) {
-	  individualDiskDriveLabel.setVisible(visible);
-	  individualDiskDriveUsageLabel.setVisible(visible);
-	  overAllDiskDriveUsageLabel.setVisible(visible);
-	  overAllDiskDriveLabel.setVisible(visible);
-	  individualDiskDriveSelection.setVisible(visible);
-	  labelOverDiskDriveSelection.setVisible(visible);
+    individualDiskDriveLabel.setVisible(visible);
+    individualDiskDriveUsageLabel.setVisible(visible);
+    overAllDiskDriveUsageLabel.setVisible(visible);
+    overAllDiskDriveLabel.setVisible(visible);
+    individualDiskDriveSelection.setVisible(visible);
+    labelOverDiskDriveSelection.setVisible(visible);
   }
   
   private void ramGraphVisible(boolean visible) {
-	  ramCanvas.setVisible(visible);
-	  ramOverLabel.setVisible(visible);
-	  ramUnderLabel.setVisible(visible);
-	  ramLeftLabel.setVisible(visible);
+    ramCanvas.setVisible(visible);
+    ramOverLabel.setVisible(visible);
+    ramUnderLabel.setVisible(visible);
+    ramLeftLabel.setVisible(visible);
   }
   
   private void cpuGraphVisible(boolean visible) {
-	  cpuCanvas.setVisible(visible);
-	  cpuOverLabel.setVisible(visible);
-	  cpuUnderLabel.setVisible(visible);
-	  cpuLeftLabel.setVisible(visible);
+    cpuCanvas.setVisible(visible);
+    cpuOverLabel.setVisible(visible);
+    cpuUnderLabel.setVisible(visible);
+    cpuLeftLabel.setVisible(visible);
   }
   
   // Anfang Methoden
@@ -225,28 +227,28 @@ public class GUI extends JFrame {
   } // end of confirmThresholdUpdate_ActionPerformed
 
   public void serverUrlConfirm_ActionPerformed(ActionEvent evt) {
-	  
-	    configureServerUrl(serverUrlInputField.getText());
-	    boolean couldConnect = false;
-	   try {
-	    couldConnect = serverConnection.testConnection();
-	   }catch(URISyntaxException e) {
-		   connectionErrorLabel.setText("URL Syntax Error. Example URL: http://localhost:8080");
-		   return;
-	   }
-	    if(couldConnect) {
-	    	urlInputScreen(false);
-	    	monitoringScreen(true);
-	    	connectionErrorLabel.setText("");
-	    }else {
-	    	connectionErrorLabel.setText("Could not connect to the entered Url");
-	    }
+    
+      configureServerUrl(serverUrlInputField.getText());
+      boolean couldConnect = false;
+     try {
+      couldConnect = serverConnection.testConnection();
+     }catch(URISyntaxException e) {
+       connectionErrorLabel.setText("URL Syntax Error. Example URL: http://localhost:8080");
+       return;
+     }
+      if(couldConnect) {
+        urlInputScreen(false);
+        monitoringScreen(true);
+        connectionErrorLabel.setText("");
+      }else {
+        connectionErrorLabel.setText("Could not connect to the entered Url");
+      }
   }
   
   
   private void configureServerUrl(String newServerUrl){
-	serverConnection = new Communicator(newServerUrl);
-	
+  serverConnection = new Communicator(newServerUrl);
+  
   } 
   
 

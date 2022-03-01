@@ -53,8 +53,8 @@ public class DiskDrive {
 	
 	public DiskDrive(String diskName) {
 		this.diskName = diskName;
-		this.spaceHardCap = Thresholds.DISKSPACEINDIVIDUALDEFAULTHARDCAP;
-		this.spaceSoftCap = Thresholds.DISKSPACEINDIVIDUALDEFAULTSOFTCAP;
+		this.spaceHardCap = ThresholdList.getValue(ThresholdList.DISKSPACEINDIVIDUALDEFAULTHARDCAP);
+		this.spaceSoftCap = ThresholdList.getValue(ThresholdList.DISKSPACEINDIVIDUALDEFAULTSOFTCAP);
 		this.lastUsage = 0;
 	}
 

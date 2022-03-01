@@ -17,13 +17,13 @@ public class CPUUsageAnalyser {
 		for(CPUUsage cpuUsage : cpuUsages) {
 			sumOfPercentages += cpuUsage.getUsage();
 			counter++;
-			if(cpuUsage.getUsage() > Thresholds.CPUHARDCAP)
+			if(cpuUsage.getUsage() > ThresholdList.getValue(ThresholdList.CPUHARDCAP))
 				cpuAlert(cpuUsage.getUsage());
 		}
 		int mean = 0;
 		if(counter != 0)
 			mean = sumOfPercentages/counter;
-		if(mean > Thresholds.CPUSOFTCAP)
+		if(mean > ThresholdList.getValue(ThresholdList.CPUSOFTCAP))
 			cpuAlert(mean);
 	}
 

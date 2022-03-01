@@ -20,13 +20,13 @@ public class RAMUsageAnalyser {
 		for(RAMUsage ramUsage : ramUsages) {
 			sumOfPercentages += ramUsage.getUsage();
 			counter++;
-			if(ramUsage.getUsage() > Thresholds.RAMHARDCAP)
+			if(ramUsage.getUsage() > ThresholdList.getValue(ThresholdList.RAMHARDCAP))
 				ramAlert(ramUsage.getUsage());
 		}
 		double mean = 0;
 		if(counter != 0)
 			mean = sumOfPercentages/counter;
-		if(mean > Thresholds.RAMSOFTCAP)
+		if(mean > ThresholdList.getValue(ThresholdList.RAMSOFTCAP))
 			ramAlert(mean);
 	}
 
