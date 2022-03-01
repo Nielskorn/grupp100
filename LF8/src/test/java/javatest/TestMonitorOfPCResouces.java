@@ -16,7 +16,7 @@ public void Cpuload() {
 	CPUUsage cpuUsage;
 	MonitorOfPCResorces mon= new MonitorOfPCResorces();
 	mon.OsInfo();
-	cpuUsage=mon.getCpuload();
+	cpuUsage=mon.getCpuload(mon.OsName);
 	assertNotNull(cpuUsage.getDate());
 	System.out.println(cpuUsage.getUsage());
 	assertTrue(cpuUsage.getUsage()>=0);

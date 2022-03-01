@@ -22,7 +22,6 @@ import datainterpretation.DiskSpaceDataAcceptor;
 public class MonitorOfPCResorces {
 	String cpuReadCommand = "CPU_Percentage.bat";
 	static double GB = 1024 * 1024 * 1024;
-	JSensors jsen =JSensors.get;
 	// Format drive space as per your need
 	// double MB = 1024D * 1024D;
 	// double KB = 1024D;
@@ -38,7 +37,7 @@ public class MonitorOfPCResorces {
 		MonitorOfPCResorces mon = new MonitorOfPCResorces();
 		mon.memoryinfo();
 		mon.OsInfo();
-		mon.getCpuload();
+		mon.getCpuload(mon.OsName);
 		mon.drivespace();
 	}
 
@@ -94,41 +93,54 @@ public class MonitorOfPCResorces {
 		
 		return ram;
 	}
-	 public CPUUsage getCpuload() {
-			List<Cpu> cpus =jsen.components().cpus;
-			int cpuperantage=0;
-			for(Cpu cpu:cpus){
-				if(cpus.size()>1) {
-					List<Load> loads = cpu.sensors.loads;
-					for (Load ind2Load : loads) {
-					if (ind2Load.name.matches("Load CPU Total")){
-					cpuperantage=cpuperantage+ind2Load.value.intValue();
-					}}}	
-				
-				else {
-			List<Load> loads = cpu.sensors.loads;
-			loads = cpu.sensors.loads;
-			for ( Load indLoad : loads) {
-			if (indLoad.name.matches("Load CPU Total")){
-			cpuperantage= indLoad.value.intValue();
-			}}	
-			}
-			}
+	 public CPUUsage getCpuload(String OsName) {
+			double cpuUsageAsDoubleForLinux = 0;
+			int cpuUsageAsInt=0;
+			
+
+			if (OsName.toLowerCase().contains("windows")) {
+				cpuUsageAsInt = getCpuLoadWindows();
+			}else {		
+				cpuUsageAsDoubleForLinux = sunbean.getSystemCpuLoad();
+				System.out.println("CPU LOAD :" + cpuUsageAsDoubleForLinux);
+				cpuUsageAsDoubleForLinux = cpuUsageAsDoubleForLinux * 100;
+				cpuUsageAsInt = (int) Math.round(cpuUsageAsDoubleForLinux);
+				System.out.println("Usage as Int: "+cpuUsageAsInt);
+			}		
 			Instant now = Instant.now();
 			cpuUsageTimestamp=Timestamp.from(now);
-			CPUUsage CpuUsage=new CPUUsage(cpuUsageTimestamp,cpuperantage);
+			CPUUsage CpuUsage=new CPUUsage(cpuUsageTimestamp,cpuUsageAsInt);
 			return CpuUsage;
-			//String cpuUsagePercentageAsString = null;
-			//Process cpuRead = null;
-			//if (new File("CPU_Percentage.bat").exists()) {
-				//try {
-					//cpuRead = Runtime.getRuntime().exec(cpuReadCommand);
-				//} catch (IOException e) {
-					//// TODO Auto-generated catch block
-				//	e.printStackTrace();
-			//return cpuperantage;
+		}
+		
+		private int getCpuLoadWindows() {
+			String cpuUsagePercentageAsString = null;
+			Process cpuRead = null;
+			if (new File("CPU_Percentage.bat").exists()) {
+				try {
+					cpuRead = Runtime.getRuntime().exec(cpuReadCommand);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				
-				//}
+				}
+
+			}
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(cpuRead.getInputStream()));
+		
+			try {
+				for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+					if (!line.isBlank())
+						cpuUsagePercentageAsString = line;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			cpuUsagePercentageAsString = cpuUsagePercentageAsString.strip();
+			return Integer.parseInt(cpuUsagePercentageAsString);
+			
+		}
 
 			}
 			
@@ -136,6 +148,6 @@ public class MonitorOfPCResorces {
 
 
 	
-}
+
 
 

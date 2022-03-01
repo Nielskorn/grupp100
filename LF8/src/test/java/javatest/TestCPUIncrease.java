@@ -16,8 +16,7 @@ class TestCPUIncrease {
 		CPUUsage cpuValue2=null;
 		MonitorOfPCResorces mon= new MonitorOfPCResorces();
 		mon.OsInfo();
-		cpuValue1=mon.getCpuload();
-			//mon.getCpuload(mon.OsName);
+		cpuValue1=mon.getCpuload(mon.OsName);
 		CpuLoadThread last = null;
 		for(int i=0; i < 10; i++) {
 			last = new CpuLoadThread();
@@ -26,8 +25,7 @@ class TestCPUIncrease {
 		while(!last.started) {
 			
 		}
-		cpuValue2=mon.getCpuload();
-				//mon.getCpuload(mon.OsName);	
+		cpuValue2=mon.getCpuload(mon.OsName);	
 		System.out.println(cpuValue1.getUsage() + " " + cpuValue2.getUsage());
 		assertTrue(cpuValue1.getUsage() < cpuValue2.getUsage());		
 	}
