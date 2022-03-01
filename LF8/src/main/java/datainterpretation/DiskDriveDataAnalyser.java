@@ -19,11 +19,11 @@ public class DiskDriveDataAnalyser {
 		if(totalSpace == 0)
 			return;
 		double totalUsage = usedSpace / totalSpace *100;
-		if(totalUsage > Thresholds.DISKSPACEOVERALLHARDCAP) {
+		if(totalUsage > ThresholdList.getValue(ThresholdList.DISKSPACEOVERALLHARDCAP)) {
 			diskTotalHardAlert();
 			return;
 		}
-		if(totalUsage > Thresholds.DISKSPACEOVERALLSOFTCAP) {
+		if(totalUsage > ThresholdList.getValue(ThresholdList.DISKSPACEOVERALLSOFTCAP)) {
 			diskTotalSoftAlert();
 		}
 		
