@@ -41,7 +41,7 @@ public class MonitorOfPCResorces {
 		mon.drivespace();
 	}
 
-	 void drivespace() {
+	 public void drivespace() {
 		double totalOfTotals=0;
 		double totalOfFreeSpace=0;
 		double totalOfUsableSpace=0;
