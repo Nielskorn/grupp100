@@ -1,18 +1,26 @@
 package monitoring;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import Main.MonitorOfPCResorces;
 
 public class monitorThread extends Thread {
-		@Override
 		public void run() {
 			MonitorOfPCResorces pc = new MonitorOfPCResorces();
 			pc.OsInfo();
-			while (true) {	
+			
 				pc.getCpuload(pc.OsName);
 				pc.memoryinfo();
-				pc.drivespace();	
-			}
+				pc.drivespace();
+			
+			
 			
 		}
-}
+		public void runInInterval(int intervalInSeconds) {
+		monitorThread mt= new monitorThread();
+		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+		executor.scheduleAtFixedRate(mt, 0, intervalInSeconds, TimeUnit.SECONDS);
+}}
 

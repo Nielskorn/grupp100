@@ -101,8 +101,8 @@ public class MonitorOfPCResorces {
 			if (OsName.toLowerCase().contains("windows")) {
 				
 					
-				double cpuload = getCpuWin11();
-				cpuUsageAsInt=(int) Math.round(cpuload);
+				cpuUsageAsInt= getCpuLoadWindows();
+			//	cpuUsageAsInt=(int) Math.round(cpuload);
 					
 				
 				
