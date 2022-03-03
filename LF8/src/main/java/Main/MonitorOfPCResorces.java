@@ -7,19 +7,19 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.List;
 
-import com.profesorfalken.jsensors.JSensors;
-import com.profesorfalken.jsensors.model.components.Components;
-import com.profesorfalken.jsensors.model.components.Cpu;
-import com.profesorfalken.jsensors.model.sensors.Load;
 import com.sun.management.OperatingSystemMXBean;
 
 import database.CPUUsage;
 import database.RAMUsage;
 import datainterpretation.DiskSpaceDataAcceptor;
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.CentralProcessor.TickType;
+import oshi.hardware.HardwareAbstractionLayer;
 
 public class MonitorOfPCResorces {
+	
 	String cpuReadCommand = "CPU_Percentage.bat";
 	static double GB = 1024 * 1024 * 1024;
 	// Format drive space as per your need
@@ -99,7 +99,13 @@ public class MonitorOfPCResorces {
 			
 
 			if (OsName.toLowerCase().contains("windows")) {
-				cpuUsageAsInt = getCpuLoadWindows();
+				
+					
+				double cpuload = getCpuWin11();
+				cpuUsageAsInt=(int) Math.round(cpuload);
+					
+				
+				
 			}else {		
 				cpuUsageAsDoubleForLinux = sunbean.getSystemCpuLoad();
 				System.out.println("CPU LOAD :" + cpuUsageAsDoubleForLinux);
@@ -140,6 +146,17 @@ public class MonitorOfPCResorces {
 			cpuUsagePercentageAsString = cpuUsagePercentageAsString.strip();
 			return Integer.parseInt(cpuUsagePercentageAsString);
 			
+		}
+		public  double getCpuWin11()
+		{
+			 SystemInfo si = new SystemInfo();
+			 HardwareAbstractionLayer hal = si.getHardware();
+			 CentralProcessor cpu = hal.getProcessor();
+			long[] prevTicks = new long[TickType.values().length];
+		    double cpuLoad = cpu.getSystemCpuLoadBetweenTicks( prevTicks ) * 100;
+		    prevTicks = cpu.getSystemCpuLoadTicks();
+		    System.out.println("cpuLoad : " + cpuLoad);
+		    return cpuLoad;
 		}
 
 			}
