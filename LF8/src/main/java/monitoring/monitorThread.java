@@ -18,9 +18,9 @@ public class monitorThread extends Thread {
 			
 			
 		}
-		public void runInInterval(int intervalInMin) {
+		public void runInInterval(int intervalInSeconds) {
 		monitorThread mt= new monitorThread();
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(mt, 0, intervalInMin, TimeUnit.SECONDS);
+		executor.scheduleAtFixedRate(mt, 0, intervalInSeconds, TimeUnit.SECONDS);
 }}
 
