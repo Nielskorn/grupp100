@@ -84,9 +84,9 @@ public class MonitorOfPCResorces {
 		double memoryOnePercentage=totalMemory/100;
 		double memoryInPercentage= usedMemory/memoryOnePercentage;
 		
-		System.out.printf("usedMemorySize:%8.2f\n" ,usedMemory);
-		System.out.printf("freeMemorySize:%8.2f GB\n", freeMemory);
-		System.out.printf("TotalMemorySize:%8.2f GB\n",totalMemory);
+		//System.out.printf("usedMemorySize:%8.2f\n" ,usedMemory);
+		//System.out.printf("freeMemorySize:%8.2f GB\n", freeMemory);
+		//System.out.printf("TotalMemorySize:%8.2f GB\n",totalMemory);
 		Instant now = Instant.now();
 		memoryUsageTimestamp=Timestamp.from(now);
 		RAMUsage ram=new RAMUsage(memoryUsageTimestamp, memoryInPercentage);
@@ -155,7 +155,7 @@ public class MonitorOfPCResorces {
 			long[] prevTicks = new long[TickType.values().length];
 		    double cpuLoad = cpu.getSystemCpuLoadBetweenTicks( prevTicks ) * 100;
 		    prevTicks = cpu.getSystemCpuLoadTicks();
-		    System.out.println("cpuLoad : " + cpuLoad);
+		    //System.out.println("cpuLoad : " + cpuLoad);
 		    return cpuLoad;
 		}
 

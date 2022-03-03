@@ -1,8 +1,7 @@
 package Webside;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import datainterpretation.Threshold;
 import datainterpretation.ThresholdList;
 
 @RestController("thresholds")
@@ -19,13 +17,15 @@ import datainterpretation.ThresholdList;
 public class ThresholdController {
 	
 	@PostMapping("/changeThreshold")
-	public ResponseEntity<?> changeThreshold(@RequestBody @NonNull Threshold newThreshold) {
-		ThresholdList.changeValue(newThreshold.name, newThreshold.value);
+	public ResponseEntity<?> changeThreshold(@RequestBody @NonNull HashMap<String,Double> newThreshold) {
+		for(String thresholdName : newThreshold.keySet()) {
+			ThresholdList.changeValue(thresholdName, newThreshold.get(thresholdName));
+		}
 		return ResponseEntity.ok(null);
 	}
 	
 	@GetMapping("/getThresholds")
-	public ResponseEntity<ArrayList<Threshold>> getThresholds(){
+	public ResponseEntity<HashMap<String,Double>> getThresholds(){
 		return ResponseEntity.ok(ThresholdList.getThresholdsAsList());
 	}
 	

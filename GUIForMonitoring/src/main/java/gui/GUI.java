@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -50,6 +51,7 @@ public class GUI extends JFrame {
   private JLabel connectionErrorLabel = new JLabel();
   // GUI functional fields
   private Communicator serverConnection;
+  HashMap<String, Double> thresholds ;
   // Ende Attribute
   
   public GUI() { 
@@ -72,7 +74,10 @@ public class GUI extends JFrame {
     enterThresholdValue.setBounds(48, 32, 150, 20);
     cp.add(enterThresholdValue);
     chooseThresholdType.setModel(modelForThresholdChoice);
-    chooseThresholdType.setBounds(224, 32, 166, 20);
+    chooseThresholdType.setBounds(224, 32, 266, 20);
+	chooseThresholdType.addItemListener( itemEvent -> {
+		differentThresholdChosen(itemEvent.getItem().toString());
+	});
     cp.add(chooseThresholdType);
     confirmThresholdUpdate.setBounds(168, 64, 75, 25);
     confirmThresholdUpdate.setText("Confirm");
@@ -222,22 +227,19 @@ public class GUI extends JFrame {
   } // end of main
   
   public void confirmThresholdUpdate_ActionPerformed(ActionEvent evt) {
-    // TODO hier Quelltext einf�gen
-    
+	  Double newThresholdValue =Double.valueOf(enterThresholdValue.getText());
+	  String thresholdName = chooseThresholdType.getSelectedItem().toString();
+	  serverConnection.changeThreshold(thresholdName, newThresholdValue);
+	  
   } // end of confirmThresholdUpdate_ActionPerformed
 
   public void serverUrlConfirm_ActionPerformed(ActionEvent evt) {
     
       configureServerUrl(serverUrlInputField.getText());
-      boolean couldConnect = false;
-     try {
-      couldConnect = serverConnection.testConnection();
-     }catch(URISyntaxException e) {
-       connectionErrorLabel.setText("URL Syntax Error. Example URL: http://localhost:8080");
-       return;
-     }
+      boolean couldConnect = testConnection();
       if(couldConnect) {
         urlInputScreen(false);
+        updateMonitoringScreen();
         monitoringScreen(true);
         connectionErrorLabel.setText("");
       }else {
@@ -245,9 +247,33 @@ public class GUI extends JFrame {
       }
   }
   
+  private void updateMonitoringScreen() {
+	  getThresholds();
+  }
+  
+  private void getThresholds() {
+	thresholds = serverConnection.getThresholds();
+	chooseThresholdType.removeAllItems();
+	for(String key : thresholds.keySet()) {
+		chooseThresholdType.addItem(key);
+	}
+
+  }
+  private void differentThresholdChosen(String item) {
+	  
+  }
+  
+  private boolean testConnection() {
+	  try {
+	      return serverConnection.testConnection();
+	     }catch(URISyntaxException e) {
+	       connectionErrorLabel.setText("URL Syntax Error. Example URL: http://localhost:8080");
+	       return false;
+	    }
+  }
   
   private void configureServerUrl(String newServerUrl){
-  serverConnection = new Communicator(newServerUrl);
+	  serverConnection = new Communicator(newServerUrl);
   
   } 
   
