@@ -75,9 +75,6 @@ public class GUI extends JFrame {
     cp.add(enterThresholdValue);
     chooseThresholdType.setModel(modelForThresholdChoice);
     chooseThresholdType.setBounds(224, 32, 266, 20);
-	chooseThresholdType.addItemListener( itemEvent -> {
-		differentThresholdChosen(itemEvent.getItem().toString());
-	});
     cp.add(chooseThresholdType);
     confirmThresholdUpdate.setBounds(168, 64, 75, 25);
     confirmThresholdUpdate.setText("Confirm");
@@ -129,6 +126,10 @@ public class GUI extends JFrame {
     cp.add(labelOverDiskDriveSelection);
     dataUpdateFrequencySelector.setModel(modelForDataUpdateFrequency);
     dataUpdateFrequencySelector.setBounds(752, 528, 150, 20);
+    dataUpdateFrequencySelector.addItemListener( itemEvent -> {
+		differentFrequencyChosen(itemEvent.getItem().toString());
+	});
+    //TODO add time values
     cp.add(dataUpdateFrequencySelector);
     dataUpdateFrequencyDescription.setBounds(748, 504, 200, 20);
     dataUpdateFrequencyDescription.setText("Select Data Update Frequency");
@@ -247,7 +248,7 @@ public class GUI extends JFrame {
       }
   }
   
-  private void updateMonitoringScreen() {
+  public void updateMonitoringScreen() {
 	  getThresholds();
   }
   
@@ -259,8 +260,8 @@ public class GUI extends JFrame {
 	}
 
   }
-  private void differentThresholdChosen(String item) {
-	  
+  private void differentFrequencyChosen(String item) {
+	  //TODO
   }
   
   private boolean testConnection() {

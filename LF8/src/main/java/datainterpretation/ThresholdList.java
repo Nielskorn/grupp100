@@ -35,7 +35,7 @@ public class ThresholdList {
 	
 	public static void changeValue(String thresholdName, double newValue) {
 		thresholds.put(thresholdName, newValue);
-		System.out.println(thresholdName + "has new Value " + newValue);
+		System.out.println(thresholdName + " has new Value " + newValue);
 	}
 	
 	public static HashMap<String,Double> getThresholdsAsList(){
