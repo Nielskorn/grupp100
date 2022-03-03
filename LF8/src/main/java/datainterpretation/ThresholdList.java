@@ -35,14 +35,11 @@ public class ThresholdList {
 	
 	public static void changeValue(String thresholdName, double newValue) {
 		thresholds.put(thresholdName, newValue);
+		System.out.println(thresholdName + "has new Value " + newValue);
 	}
 	
-	public static ArrayList<Threshold> getThresholdsAsList(){
-		ArrayList<Threshold> thresholdList = new ArrayList<Threshold>();
-		for(String key : thresholds.keySet()) {
-			thresholdList.add(getThreshold(key));
-		}
-		return thresholdList;
+	public static HashMap<String,Double> getThresholdsAsList(){
+		return thresholds;
 	}
 	
 
