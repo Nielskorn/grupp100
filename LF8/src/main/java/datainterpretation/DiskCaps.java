@@ -44,8 +44,10 @@ public class DiskCaps {
 	
 	private static DiskDrive getDiskCaps(String driveName) {
 		for(DiskDrive diskDrive : driveList) {
-			if(diskDrive.getDiskName().contentEquals(driveName))
+			if(diskDrive.getDiskName().contentEquals(driveName)) {
+				System.out.println("Disk Drive found");
 				return diskDrive;
+			}
 		}
 		DiskDrive diskDrive = new DiskDrive(driveName);
 		driveList.add(diskDrive);

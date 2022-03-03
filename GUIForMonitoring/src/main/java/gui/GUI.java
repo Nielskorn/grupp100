@@ -51,7 +51,8 @@ public class GUI extends JFrame {
   private JLabel connectionErrorLabel = new JLabel();
   // GUI functional fields
   private Communicator serverConnection;
-  HashMap<String, Double> thresholds ;
+  HashMap<String, Double> thresholds;
+  HashMap<String, Double> driveUsage;
   // Ende Attribute
   
   public GUI() { 
@@ -110,15 +111,18 @@ public class GUI extends JFrame {
     individualDiskDriveLabel.setBounds(72, 496, 46, 20);
     
     cp.add(individualDiskDriveLabel);
-    individualDiskDriveUsageLabel.setBounds(160, 496, 46, 28);
+    individualDiskDriveUsageLabel.setBounds(160, 496, 46, 20);
     cp.add(individualDiskDriveUsageLabel);
     individualDiskDriveSelection.setModel(modelForIndividualDiskDriveSelection);
     individualDiskDriveSelection.setBounds(232, 496, 150, 20);
+    individualDiskDriveSelection.addItemListener( itemEvent -> {
+		differentDiskDriveChosen(itemEvent.getItem().toString());
+	});
     cp.add(individualDiskDriveSelection);
     overAllDiskDriveLabel.setBounds(64, 552, 110, 20);
     overAllDiskDriveLabel.setText("TotalDrive Usage:");
     cp.add(overAllDiskDriveLabel);
-    overAllDiskDriveUsageLabel.setBounds(232, 544, 110, 20);
+    overAllDiskDriveUsageLabel.setBounds(232, 552, 110, 20);
     
     cp.add(overAllDiskDriveUsageLabel);
     labelOverDiskDriveSelection.setBounds(240, 472, 110, 20);
@@ -141,6 +145,7 @@ public class GUI extends JFrame {
     thresholdSelectionDescription.setText("Select Threshold");
     cp.add(thresholdSelectionDescription);
     serverUrlInputField.setBounds(456, 312, 246, 20);
+    serverUrlInputField.setText("http://localhost:8080");
     cp.add(serverUrlInputField);
     serverUrlConfirm.setBounds(528, 352, 99, 33);
     serverUrlConfirm.setText("Confirm");
@@ -162,12 +167,13 @@ public class GUI extends JFrame {
     monitoringScreen(false);
     urlInputScreen(true);
   } // end of public GUI
+
   private void updateIndividualDiskDriveLabels(String driveName, double usage) {
     individualDiskDriveLabel.setText(driveName);
-    individualDiskDriveUsageLabel.setText(usage+"%");
+    individualDiskDriveUsageLabel.setText(Math.round(usage)+"%");
   }
   private void updateOverAllDiskDrive(double usage) {
-    overAllDiskDriveUsageLabel.setText(usage + "%");
+    overAllDiskDriveUsageLabel.setText(Math.round(usage) + "%");
   }
   
   private void urlInputScreen(boolean visible) {
@@ -250,6 +256,29 @@ public class GUI extends JFrame {
   
   public void updateMonitoringScreen() {
 	  getThresholds();
+	  updateDiskDrives();
+  }
+  
+  private void differentDiskDriveChosen(String drive) {
+	  updateIndividualDiskDriveLabels(drive, driveUsage.get(drive));
+  }
+  
+  private void updateDiskDrives() {
+	  updateOverAllDiskDrive(serverConnection.getOverAllDiskUsage());
+	  driveUsage = serverConnection.getIndividualDiskUsages();
+	  String selectedItem = null;
+	  if( individualDiskDriveSelection.getSelectedItem() != null)
+		  selectedItem = individualDiskDriveSelection.getSelectedItem().toString();
+	  individualDiskDriveSelection.removeAllItems();
+	  for(String key : driveUsage.keySet()) {
+		  individualDiskDriveSelection.addItem(key);
+	  }
+	  if(selectedItem != null)
+		  try {
+			  individualDiskDriveSelection.setSelectedItem(selectedItem);
+		  }catch(Exception e) {
+		  
+		  }
   }
   
   private void getThresholds() {

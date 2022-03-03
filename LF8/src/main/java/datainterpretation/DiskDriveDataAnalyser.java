@@ -8,6 +8,8 @@ import utils.MessagesSource;
 public class DiskDriveDataAnalyser {
 	static double alertValue;
 	static EMailSenderService diskSender= new EMailSenderService();
+	private static double lastTotalUsage = 0;
+	
 	public static void analyseData() {
 		double totalSpace = 0;
 		double usedSpace = 0;
@@ -18,15 +20,20 @@ public class DiskDriveDataAnalyser {
 		}
 		if(totalSpace == 0)
 			return;
-		double totalUsage = usedSpace / totalSpace *100;
-		if(totalUsage > ThresholdList.getValue(ThresholdList.DISKSPACEOVERALLHARDCAP)) {
+		lastTotalUsage = usedSpace / totalSpace *100;
+		if(lastTotalUsage > ThresholdList.getValue(ThresholdList.DISKSPACEOVERALLHARDCAP)) {
 			diskTotalHardAlert();
 			return;
 		}
-		if(totalUsage > ThresholdList.getValue(ThresholdList.DISKSPACEOVERALLSOFTCAP)) {
+		if(lastTotalUsage > ThresholdList.getValue(ThresholdList.DISKSPACEOVERALLSOFTCAP)) {
 			diskTotalSoftAlert();
 		}
 		
+	}
+	
+	public static double getLastTotalUsage() {
+		analyseData();
+		return lastTotalUsage;
 	}
 
 	private static void diskTotalSoftAlert() {

@@ -26,7 +26,7 @@ public class ThresholdController {
 	
 	@GetMapping("/getThresholds")
 	public ResponseEntity<HashMap<String,Double>> getThresholds(){
-		return ResponseEntity.ok(ThresholdList.getThresholdsAsList());
+		return ResponseEntity.ok(ThresholdList.getThresholds());
 	}
 	
 	

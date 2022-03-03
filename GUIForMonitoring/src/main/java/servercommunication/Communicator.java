@@ -57,7 +57,7 @@ public class Communicator {
 		HashMap<String, Double> postBody = new HashMap<>();
 		postBody.put(thresholdName, newValue);
 		HttpHeaders headers = new HttpHeaders();
-		HttpEntity<HashMap<String,Double>> requestEntity = new HttpEntity(postBody,headers);
+		HttpEntity<HashMap<String,Double>> requestEntity = new HttpEntity<>(postBody,headers);
 		Class<Byte> expectedClass = Byte.class;
 		String method = "/thresholds/changeThreshold";
 		ResponseEntity<Byte> response = null;
@@ -69,5 +69,38 @@ public class Communicator {
 			return response.getStatusCode()==HttpStatus.OK;
 		return false;
 	}
+	
+	public HashMap<String, Double> getIndividualDiskUsages(){
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> requestEntity = new HttpEntity<>("",headers);
+		Class<HashMap<String,Double>> expectedClass = (Class<HashMap<String, Double>>) new HashMap<String,Double>().getClass();
+		String method = "/database/diskUsage";
+		ResponseEntity<HashMap<String,Double>> response = null;
+		try {
+			response = connector.exchange(serverUrl + method, HttpMethod.GET, requestEntity, expectedClass);
+		}catch(IllegalArgumentException e) {
+		}
+		if(response != null && response.getStatusCode().is2xxSuccessful())
+			return response.getBody();
+		else
+			return new HashMap<String,Double>();
+	}
+	
+	public double getOverAllDiskUsage() {
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> requestEntity = new HttpEntity<>("",headers);
+		Class<Double> expectedClass = Double.class;
+		String method = "/database/overAllDiskUsage";
+		ResponseEntity<Double> response = null;
+		try {
+			response = connector.exchange(serverUrl + method, HttpMethod.GET, requestEntity, expectedClass);
+		}catch(IllegalArgumentException e) {
+		}
+		if(response != null && response.getStatusCode().is2xxSuccessful())
+			return response.getBody();
+		else
+			return 0.0;
+	}
+	
 
 }
