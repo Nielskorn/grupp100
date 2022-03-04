@@ -6,7 +6,6 @@ import utils.MessagesSource;
 public class DiskSpaceDataAcceptor {
 	
 	public static void acceptDiskData(String diskDriveName, double totalSpace, double freeSpace) {
-		System.out.println(diskDriveName + " usage set to bla");
 		if(totalSpace == 0)
 			return;
 		double usage = (1 - ( freeSpace / totalSpace )) * 100;

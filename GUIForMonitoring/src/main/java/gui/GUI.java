@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -53,9 +54,10 @@ public class GUI extends JFrame {
   private JLabel serverUrlDescription = new JLabel();
   private JLabel connectionErrorLabel = new JLabel();
   // GUI functional fields
-  private Communicator serverConnection;
-  HashMap<String, Double> thresholds;
-  HashMap<String, Double> driveUsage;
+  public Communicator serverConnection;
+  private HashMap<String, Double> thresholds;
+  private HashMap<String, Double> driveUsage;
+  private UpdateGUIThread updateThread ;
   // Ende Attribute
   
   public GUI() { 
@@ -89,46 +91,46 @@ public class GUI extends JFrame {
       }
     });
     cp.add(confirmThresholdUpdate);
-    ramCanvas.setBounds(696, 176, 308, 228);
+    ramCanvas.setBounds(696, 160, 300, 300);
     cp.add(ramCanvas);
-    ramOverLabel.setBounds(688, 136, 110, 20);
+    ramOverLabel.setBounds(688, 130, 110, 20);
     ramOverLabel.setText("Ram Usage Graph");
     cp.add(ramOverLabel);
-    cpuCanvas.setBounds(96, 160, 348, 252);
+    cpuCanvas.setBounds(96, 160, 300, 300);
     cp.add(cpuCanvas);
-    cpuOverLabel.setBounds(88, 128, 110, 20);
+    cpuOverLabel.setBounds(88, 130, 110, 20);
     cpuOverLabel.setText("CPU Usage Graph");
     cp.add(cpuOverLabel);
-    cpuUnderLabel.setBounds(200, 424, 110, 20);
+    cpuUnderLabel.setBounds(200, 460, 110, 20);
     cpuUnderLabel.setText("Time in Minutes");
     cp.add(cpuUnderLabel);
-    cpuLeftLabel.setBounds(8, 264, 78, 20);
+    cpuLeftLabel.setBounds(8, 270, 78, 20);
     cpuLeftLabel.setText("CPU in %");
     cp.add(cpuLeftLabel);
-    ramLeftLabel.setBounds(608, 272, 70, 20);
+    ramLeftLabel.setBounds(608, 270, 70, 20);
     ramLeftLabel.setText("RAM in %");
     cp.add(ramLeftLabel);
-    ramUnderLabel.setBounds(800, 424, 110, 20);
+    ramUnderLabel.setBounds(800, 460, 110, 20);
     ramUnderLabel.setText("Time in Minutes");
     cp.add(ramUnderLabel);
-    individualDiskDriveLabel.setBounds(72, 496, 46, 20);
+    individualDiskDriveLabel.setBounds(72, 526, 46, 20);
     
     cp.add(individualDiskDriveLabel);
-    individualDiskDriveUsageLabel.setBounds(160, 496, 46, 20);
+    individualDiskDriveUsageLabel.setBounds(160, 526, 46, 20);
     cp.add(individualDiskDriveUsageLabel);
     individualDiskDriveSelection.setModel(modelForIndividualDiskDriveSelection);
-    individualDiskDriveSelection.setBounds(232, 496, 150, 20);
+    individualDiskDriveSelection.setBounds(232, 526, 150, 20);
     individualDiskDriveSelection.addItemListener( itemEvent -> {
 		differentDiskDriveChosen(itemEvent.getItem().toString());
 	});
     cp.add(individualDiskDriveSelection);
-    overAllDiskDriveLabel.setBounds(64, 552, 110, 20);
+    overAllDiskDriveLabel.setBounds(64, 582, 110, 20);
     overAllDiskDriveLabel.setText("TotalDrive Usage:");
     cp.add(overAllDiskDriveLabel);
-    overAllDiskDriveUsageLabel.setBounds(232, 552, 110, 20);
+    overAllDiskDriveUsageLabel.setBounds(232, 582, 110, 20);
     
     cp.add(overAllDiskDriveUsageLabel);
-    labelOverDiskDriveSelection.setBounds(240, 472, 110, 20);
+    labelOverDiskDriveSelection.setBounds(240, 502, 110, 20);
     labelOverDiskDriveSelection.setText("Select Disk Drive");
     cp.add(labelOverDiskDriveSelection);
     dataUpdateFrequencySelector.setModel(modelForDataUpdateFrequency);
@@ -309,9 +311,7 @@ public class GUI extends JFrame {
 
   }
   
-  private void differentFrequencyChosen(String item) {
-	  //TODO
-	  ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);	 
+  private void differentFrequencyChosen(String item) {	 
 	 int timeinsec = 0; 
 	 switch (item) {
 	case"30sec":
@@ -333,7 +333,11 @@ public class GUI extends JFrame {
 		break;
 
 	}
-	 
+	if(updateThread == null) {
+		updateThread = new UpdateGUIThread(this,Duration.ofSeconds(timeinsec));
+		updateThread.start();
+	}
+	updateThread.updateFrequency(Duration.ofSeconds(timeinsec));
   }
   
   

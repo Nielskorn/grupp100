@@ -32,7 +32,6 @@ public class DataController {
 	
 	@GetMapping("/overAllDiskUsage")
 	public ResponseEntity<Double> getOverAllDiskUsage() {
-		System.out.println(DiskDriveDataAnalyser.getLastTotalUsage());
 		return ResponseEntity.ok(DiskDriveDataAnalyser.getLastTotalUsage());
 	}
 	

@@ -14,7 +14,7 @@ public class GraphPainter {
 			map[i][0] = array[i];
 			map[i][1] = i;
 		}
-		paintGraph(canvas,array);
+		paintGraph(canvas,map);
 	}
 		
 }

@@ -12,15 +12,22 @@ build-job:
     - echo "$senderEmail" >> dummyFile.txt
     - echo "$Passwort" >> dummyFile.txt
     - mvn compile
+    - cd ..
+    - cd GUIForMonitoring
+    - mvn compile
   artifacts:
     paths:
         - LF8
+        - GUIForMonitoring
     expire_in: 1 hrs
 
 unit-test-job:
   stage: test
   script:
     - cd LF8
+    - mvn test
+    - cd ..
+    - cd GUIForMonitoring
     - mvn test
 
 deploy-job:      
@@ -29,9 +36,13 @@ deploy-job:
     - echo "Deploying application..."
     - cd LF8
     - mvn -Dmaven.test.skip=true package
+    - cd ..
+    - cd GUIForMonitoring
+    - mvn -Dmaven.test.skip=true package
   artifacts:
     paths:
       - LF8/target/
+      - GUIForMonitoring/target/
     expire_in: 1 day
   only:
     - main
