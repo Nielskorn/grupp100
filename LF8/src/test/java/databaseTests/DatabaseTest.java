@@ -56,8 +56,10 @@ public class DatabaseTest {
     	assertEquals(localTimeExpected.getDayOfMonth(),localTimeActual.getDayOfMonth());
     	assertEquals(localTimeExpected.getHour(),localTimeActual.getHour());
     	assertEquals(localTimeExpected.getMinute(),localTimeActual.getMinute());
-    	
     }
+    
+    
+    
     @Test
     public void entryPushTestRAMUsage() {
     	// create Expected CPUUsage

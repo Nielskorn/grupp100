@@ -49,11 +49,16 @@ public class GUI extends JFrame {
   private JButton serverUrlConfirm = new JButton();
   private JLabel serverUrlDescription = new JLabel();
   private JLabel connectionErrorLabel = new JLabel();
+  private JLabel overAllSystemUsageLabel = new JLabel();
   // GUI functional fields
   public Communicator serverConnection;
   private HashMap<String, Double> thresholds;
   private HashMap<String, Double> driveUsage;
   private UpdateGUIThread updateThread ;
+  private Integer[] lastRAMData;
+  private Integer[] lastCPUData;
+  private double lastOverAllDiskDriveUsage;
+  private int lastSelectedFrequency;
   // Ende Attribute
   
   public GUI() { 
@@ -170,6 +175,8 @@ public class GUI extends JFrame {
     serverUrlDescription.setBounds(500, 272, 210, 20);
     serverUrlDescription.setText("Please Input Server Url");
     cp.add(serverUrlDescription);
+    overAllSystemUsageLabel.setBounds(400, 600, 160, 20);
+    cp.add(overAllSystemUsageLabel);
     // Ende Komponenten
     
     setVisible(true);
@@ -198,6 +205,7 @@ public class GUI extends JFrame {
     diskDriveMonitorVisible(visible);
     thresholdInputVisible(visible);
     dataUpdateFrequencyVisible(visible);
+    overAllSystemUsageLabel.setVisible(visible);
   }
   
   private void dataUpdateFrequencyVisible(boolean visible) {
@@ -236,21 +244,17 @@ public class GUI extends JFrame {
     cpuLeftLabel.setVisible(visible);
   }
   
-  // Anfang Methoden
-  
   public static void main(String[] args) {
     new GUI();
-  } // end of main
+  }
   
   public void confirmThresholdUpdate_ActionPerformed(ActionEvent evt) {
 	  Double newThresholdValue =Double.valueOf(enterThresholdValue.getText());
 	  String thresholdName = chooseThresholdType.getSelectedItem().toString();
-	  serverConnection.changeThreshold(thresholdName, newThresholdValue);
-	  
-  } // end of confirmThresholdUpdate_ActionPerformed
+	  serverConnection.changeThreshold(thresholdName, newThresholdValue);	  
+  }
 
-  public void serverUrlConfirm_ActionPerformed(ActionEvent evt) {
-    
+  public void serverUrlConfirm_ActionPerformed(ActionEvent evt) {  
       configureServerUrl(serverUrlInputField.getText());
       boolean couldConnect = testConnection();
       if(couldConnect) {
@@ -269,11 +273,35 @@ public class GUI extends JFrame {
 	  getThresholds();
 	  updateDiskDrives();
 	  updateGraphs();
+	  updateOverAllUsage();
   }
   
+  private void updateOverAllUsage() {
+	  double averageRAMUsageInLastTimeFrame = calculateAverageUsageInLastTimeFrame(lastRAMData);
+	  double averageCPUUsageInLastTimeFrame = calculateAverageUsageInLastTimeFrame(lastCPUData);
+	  double overAllSystemUsageInLastTimeFrame = (averageRAMUsageInLastTimeFrame + averageCPUUsageInLastTimeFrame + 
+			  lastOverAllDiskDriveUsage)/3;
+	  overAllSystemUsageLabel.setText("Overall Systemusage: "+ Math.round(overAllSystemUsageInLastTimeFrame)+"%");
+  }
+
+  private double calculateAverageUsageInLastTimeFrame(Integer[] dataArray) {
+	int dataTakenInLastTimeFrame = lastSelectedFrequency/3;
+	int numberOfDataEntriesToLookAt = Integer.min(dataTakenInLastTimeFrame, dataArray.length);
+	if( numberOfDataEntriesToLookAt == 0)
+		return 0;
+	int sumOfDataUsage = 0;
+	for(int i = 0; i < numberOfDataEntriesToLookAt; i++) {
+		sumOfDataUsage += dataArray[dataArray.length-1-i];
+	}
+
+	return sumOfDataUsage/numberOfDataEntriesToLookAt;
+  }
+
   private void updateGraphs() {
-	  GraphPainter.paintGraph(ramCanvas, serverConnection.getRAMUsage());
-	  GraphPainter.paintGraph(cpuCanvas, serverConnection.getCPUUsage());
+	  lastRAMData = serverConnection.getRAMUsage();
+	  GraphPainter.paintGraph(ramCanvas, lastRAMData);
+	  lastCPUData = serverConnection.getCPUUsage();
+	  GraphPainter.paintGraph(cpuCanvas, lastCPUData);
   }
   
   private void differentDiskDriveChosen(String drive) {
@@ -281,7 +309,8 @@ public class GUI extends JFrame {
   }
   
   private void updateDiskDrives() {
-	  updateOverAllDiskDrive(serverConnection.getOverAllDiskUsage());
+	  lastOverAllDiskDriveUsage = serverConnection.getOverAllDiskUsage();
+	  updateOverAllDiskDrive(lastOverAllDiskDriveUsage);
 	  driveUsage = serverConnection.getIndividualDiskUsages();
 	  String selectedItem = null;
 	  if( individualDiskDriveSelection.getSelectedItem() != null)
@@ -329,6 +358,7 @@ public class GUI extends JFrame {
 		break;
 
 	}
+	lastSelectedFrequency = timeinsec;
 	if(updateThread == null) {
 		updateThread = new UpdateGUIThread(this,Duration.ofSeconds(timeinsec));
 		updateThread.start();

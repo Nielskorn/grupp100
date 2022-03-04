@@ -34,5 +34,9 @@ public class UpdateGUIThread extends Thread{
 	public void updateFrequency(TemporalAmount frequency) {
 		this.frequency = frequency;
 	}
+	
+	public TemporalAmount getUpdateFrequency() {
+		return frequency;
+	}
 
 }

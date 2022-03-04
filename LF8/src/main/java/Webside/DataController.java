@@ -40,7 +40,6 @@ public class DataController {
 		Integer[] dataArray = new Integer[datalist.size()];
 		for(int i = 0 ; i < dataArray.length; i++) {
 			dataArray[i] = (int)Math.round(datalist.get(i).getUsage());
-			dataArray[i] = i;
 		}
 		return ResponseEntity.ok(dataArray);
 	}
@@ -51,7 +50,6 @@ public class DataController {
 		Integer[] dataArray = new Integer[datalist.size()];
 		for(int i = 0 ; i < dataArray.length; i++) {
 			dataArray[i] = (int)Math.round(datalist.get(i).getUsage());
-			dataArray[i] = i;
 		}
 		return ResponseEntity.ok(dataArray);
 	}

@@ -4,19 +4,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import DatabaseInteractors.DatabasePusher;
 import Main.MonitorOfPCResorces;
 
 public class monitorThread extends Thread {
 		public void run() {
 			MonitorOfPCResorces pc = new MonitorOfPCResorces();
 			pc.OsInfo();
-			
-				pc.getCpuload(pc.OsName);
-				pc.memoryinfo();
-				pc.drivespace();
-			
-			
-			
+			DatabasePusher.pushCPUUsageToDatabase(pc.getCpuload(pc.OsName));
+			DatabasePusher.pushRAMUsageToDatabase(pc.memoryinfo());
+			pc.drivespace();
 		}
 		public void runInInterval(int intervalInSeconds) {
 		monitorThread mt= new monitorThread();
