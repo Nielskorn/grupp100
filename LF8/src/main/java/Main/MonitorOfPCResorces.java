@@ -13,13 +13,12 @@ import com.sun.management.OperatingSystemMXBean;
 import database.CPUUsage;
 import database.RAMUsage;
 import datainterpretation.DiskSpaceDataAcceptor;
-import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
-import oshi.hardware.CentralProcessor.TickType;
-import oshi.hardware.HardwareAbstractionLayer;
 
+/*** @author niels
+ * {@summary Class zu monitoring of Pc resorces}
+ **/
 public class MonitorOfPCResorces {
-	
+	// datei pfad für batchfile zum auslessen der cpu last in percentage
 	String cpuReadCommand = "CPU_Percentage.bat";
 	static double GB = 1024 * 1024 * 1024;
 	// Format drive space as per your need
@@ -28,20 +27,15 @@ public class MonitorOfPCResorces {
 	Timestamp cpuUsageTimestamp;
 	Timestamp memoryUsageTimestamp;
 	
-	
+	//Osname field zum weitergeben des betriebssystems
 	public String OsName;
 	static OperatingSystemMXBean sunbean = (com.sun.management.OperatingSystemMXBean) ManagementFactory
 			.getOperatingSystemMXBean();
 
-	public static void main(String[] args) {
-		MonitorOfPCResorces mon = new MonitorOfPCResorces();
-		mon.memoryinfo();
-		mon.OsInfo();
-		mon.getCpuload(mon.OsName);
-		mon.drivespace();
-	}
-
+	
+//methode zum auslesen Hard drives und übergab an dbclass
 	 public void drivespace() {
+		 //var zum speichern des gesamtsystem Speicher
 		double totalOfTotals=0;
 		double totalOfFreeSpace=0;
 		double totalOfUsableSpace=0;
@@ -51,60 +45,49 @@ public class MonitorOfPCResorces {
 			//System.out.printf("Drive: %s\n", drive);
 			String name=drive.getPath();
 			double totalSpace = drive.getTotalSpace() / GB;
-			//System.out.printf("Total Space: %8.2f GB\n", totalSpace);
+			
 			double freeSpace = drive.getFreeSpace() / GB;
-			//System.out.printf("Free Space: %8.2f GB\n", freeSpace);
+			
 			double UsableSpace = drive.getUsableSpace() / GB;
-			//System.out.printf("Usable Space: %8.2f GB\n\n", UsableSpace);
+			
+			//adding of singel drives to whole system
 			totalOfTotals=totalOfTotals+totalSpace;
 			totalOfFreeSpace = totalOfFreeSpace+freeSpace;
 			totalOfUsableSpace=totalOfUsableSpace+UsableSpace;
-			//TODO Adding Alert 
+ 
 			DiskSpaceDataAcceptor.acceptDiskData(name, totalSpace, freeSpace);
 		}
-		//System.out.println("Total of all System drives");
-		//System.out.printf("Total space: %8.2f GB\n",totalOfTotals);
-		//System.out.printf("Free Space : %8.2f GB \n",totalOfFreeSpace);
-		//System.out.printf("Usable Space: %8.2f GB \n",totalOfUsableSpace);
-		//TODO Adding ALERT for System Arlert
-		
-	}
 
+	}
+	 // methode um infos über das betriebssystems zubekommen
+	 //sets osname
 	public void OsInfo() {
 		String arch = ManagementFactory.getOperatingSystemMXBean().getArch();
 		String OsName = ManagementFactory.getOperatingSystemMXBean().getName();
 		String osVersion = ManagementFactory.getOperatingSystemMXBean().getVersion();
 		this.OsName = OsName;
 	}
-
+		//methode um usedMemory in percentage zu errechenen und dies an db zu übergeben
 	 public RAMUsage memoryinfo() {
 		double totalMemory=sunbean.getTotalPhysicalMemorySize()/GB;
 		double freeMemory = sunbean.getFreePhysicalMemorySize() / GB;
 		double usedMemory=totalMemory-freeMemory;
 		double memoryOnePercentage=totalMemory/100;
 		double memoryInPercentage= usedMemory/memoryOnePercentage;
-		
-		//System.out.printf("usedMemorySize:%8.2f\n" ,usedMemory);
-		//System.out.printf("freeMemorySize:%8.2f GB\n", freeMemory);
-		//System.out.printf("TotalMemorySize:%8.2f GB\n",totalMemory);
 		Instant now = Instant.now();
 		memoryUsageTimestamp=Timestamp.from(now);
 		RAMUsage ram=new RAMUsage(memoryUsageTimestamp, memoryInPercentage);
-		
 		return ram;
 	}
+	 //methode to get cpu load für angebens betriebssystem
+	 //und push the load as int to db
 	 public CPUUsage getCpuload(String OsName) {
 			double cpuUsageAsDoubleForLinux = 0;
 			int cpuUsageAsInt=0;
 			
 
-			if (OsName.toLowerCase().contains("windows")) {
-				
-					
-				cpuUsageAsInt= getCpuLoadWindows();
-			//	cpuUsageAsInt=(int) Math.round(cpuload);
-					
-				
+			if (OsName.toLowerCase().contains("windows")) {	
+				cpuUsageAsInt= getCpuLoadWindows();	
 				
 			}else {		
 				cpuUsageAsDoubleForLinux = sunbean.getSystemCpuLoad();
@@ -118,7 +101,8 @@ public class MonitorOfPCResorces {
 			CPUUsage CpuUsage=new CPUUsage(cpuUsageTimestamp,cpuUsageAsInt);
 			return CpuUsage;
 		}
-		
+		//methode do get cpuload in windows
+	 	// über batch dartei dies funkuniert leider nicht in windows 11
 		private int getCpuLoadWindows() {
 			String cpuUsagePercentageAsString = null;
 			Process cpuRead = null;
@@ -147,17 +131,7 @@ public class MonitorOfPCResorces {
 			return Integer.parseInt(cpuUsagePercentageAsString);
 			
 		}
-		public  double getCpuWin11()
-		{
-			 SystemInfo si = new SystemInfo();
-			 HardwareAbstractionLayer hal = si.getHardware();
-			 CentralProcessor cpu = hal.getProcessor();
-			long[] prevTicks = new long[TickType.values().length];
-		    double cpuLoad = cpu.getSystemCpuLoadBetweenTicks( prevTicks ) * 100;
-		    prevTicks = cpu.getSystemCpuLoadTicks();
-		    //System.out.println("cpuLoad : " + cpuLoad);
-		    return cpuLoad;
-		}
+
 
 			}
 			

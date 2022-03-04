@@ -30,7 +30,7 @@ public class RAMUsageAnalyser {
 			ramAlert(mean);
 	}
 
-
+	//alert methode builds alertmessage and  sends message as emails
 	public static void ramAlert(double alertValue )  {
 		try {
 			String message;

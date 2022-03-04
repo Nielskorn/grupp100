@@ -26,7 +26,7 @@ public class CPUUsageAnalyser {
 		if(mean > ThresholdList.getValue(ThresholdList.CPUSOFTCAP))
 			cpuAlert(mean);
 	}
-
+	//alert methode builds alert message an sends alert email
 	public static void cpuAlert(int alertValue) {
 		String message;
 		String subject="CpuAlert";
