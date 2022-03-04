@@ -5,12 +5,8 @@ import java.awt.event.*;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.HashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
-import javax.swing.event.*;
 
 import servercommunication.Communicator;
 
