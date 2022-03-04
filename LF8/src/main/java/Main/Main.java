@@ -2,6 +2,9 @@ package Main;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
 
@@ -30,7 +33,8 @@ public class Main {
 		SpringApplication.run(Application.class, args);
 		MessagesSource.createHashMap();
 		monitorThread mt=new monitorThread();
-		mt.run();
+		mt.runInInterval(3);
+		System.out.println("yolo");
 		//DatabaseMaintenanceThread Dmt=new DatabaseMaintenanceThread();
 		//Dmt.run();
 	
