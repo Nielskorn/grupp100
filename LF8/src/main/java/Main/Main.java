@@ -11,15 +11,8 @@ import javax.mail.MessagingException;
 import org.springframework.boot.SpringApplication;
 
 
-import DatabaseInteractors.DatabaseMaintenanceThread;
 import Webside.Application;
-import database.RAMUsage;
-import datainterpretation.CPUUsageAnalyser;
-import datainterpretation.DiskDriveDataAnalyser;
-import datainterpretation.DiskSpaceDataAcceptor;
-import datainterpretation.RAMUsageAnalyser;
 import monitoring.monitorThread;
-import service.EMailSenderService;
 import utils.MessagesSource;
 
 
