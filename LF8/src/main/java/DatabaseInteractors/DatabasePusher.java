@@ -14,25 +14,33 @@ import Main.Main;
 
 public class DatabasePusher {
 	
-	private static final String TIMECONDITION = "WHERE date < "; 
+	private static final String TIMECONDITION = "WHERE date > "; 
 	
 	public static void pushCPUUsageToDatabase(int usage, Timestamp date) {
 		CPUUsage cpuUsage = new CPUUsage(date, usage);
+		pushCPUUsageToDatabase(cpuUsage);
+	}
+	
+	public static void pushCPUUsageToDatabase(CPUUsage cpuUsage) {
 		try {
-		DBController.getVoid("INSERT INTO CPUUSAGE (date,timeInString,usage) VALUES "+
-				"('"+cpuUsage.getDate()+"','"+cpuUsage.getDay()+"','"+cpuUsage.getUsage()+"');");
-		
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
+			DBController.getVoid("INSERT INTO CPUUSAGE (date,timeInString,usage) VALUES "+
+					"('"+cpuUsage.getDate()+"','"+cpuUsage.getDay()+"','"+cpuUsage.getUsage()+"');");
+			
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
 	}
 	
 	public static void pushRAMUsageToDatabase(double usage, Timestamp date) {
 		RAMUsage ramUsage = new RAMUsage(date, usage);
+		pushRAMUsageToDatabase(ramUsage);
+	}
+	
+	public static void pushRAMUsageToDatabase(RAMUsage ramUsage) {
 		try {
-		DBController.getVoid("INSERT INTO RAMUSAGE (date,timeInString,usage) VALUES "+
-				"('"+ramUsage.getDate()+"','"+ramUsage.getDay()+"','"+ramUsage.getUsage()+"');");
-		
+			DBController.getVoid("INSERT INTO RAMUSAGE (date,timeInString,usage) VALUES "+
+					"('"+ramUsage.getDate()+"','"+ramUsage.getDay()+"','"+ramUsage.getUsage()+"');");
+			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
