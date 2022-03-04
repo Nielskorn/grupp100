@@ -2,7 +2,11 @@ package service;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
@@ -18,15 +22,20 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.hibernate.hql.internal.ast.tree.InLogicOperatorNode;
+
+import kotlin.jvm.Throws;
+import net.bytebuddy.build.Plugin.Engine.Summary;
+/**{@summary Class for sending alerts} */
 public class EMailSenderService {
 	protected Session mailSesion;
 	private String SenderEmail;
 	private String Passwort;
 
 	/**
-	 * @author niels {@summary} sets up Login for mailSesion
-	 * @param smtphost die hosting adress of emails server
-	 * @param smtpport den smtp port des Servers
+	 * @author niels {@summary  sets up Login für mailSesion}
+	 * @param smtphost die hosting address of email's server
+	 * @param smtpport den SMTP port des Servers
 	 * @param username die Email des Senders
 	 * @param passwort das passwort Sets Session
 	 */
@@ -60,8 +69,9 @@ public class EMailSenderService {
 	 * @param from     name of the sender
 	 * @param receiver recipent/s of The email
 	 * @param subject  subject line of the email
-	 * @param message  message text of the email {@summary}this Methode sets up
-	 *                 emails and sends them
+	 * @param message  message text of the email 
+	 * {@summary this Methode sets up
+	 *                 emails and sends them }
 	 */
 
 	public void send(String fromMail, String personalName, String receiver, String subject, String message)
@@ -83,7 +93,9 @@ public class EMailSenderService {
 		msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver, false));
 		Transport.send(msg);
 	}
-
+  /** {@Summary Methode to send alert}
+   * @param subject subject of the alert
+   * @param message message of the alert  */
 	public void sendAlert(String subject, String message) {
 		Credentials();
 		login("smtp.gmail.com", 587, SenderEmail, Passwort);
@@ -94,7 +106,8 @@ public class EMailSenderService {
 			e.printStackTrace();
 		}
 	}
-
+/***  {@Summary Methode to get credentials}
+ * */
 	private void Credentials() {
 		File credentials = new File("dummyFile.txt");
 
