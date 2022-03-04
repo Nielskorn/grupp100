@@ -258,16 +258,7 @@ public class GUI extends JFrame {
         connectionErrorLabel.setText("Could not connect to the entered Url");
       }
   }
-  private  void runUpdateMonitoring(int period) {
-	 java.util.Timer timer = new java.util.Timer();
-	    timer.schedule(new java.util.TimerTask(){
-	        public void run() {
-	        	updateMonitoringScreen();
-	        	int time=period;
-	        	timer.cancel(); // cancel time
-	            runUpdateMonitoring(time);
-	        }}, 0, period);
-  }
+ 
   
   public void updateMonitoringScreen() {
 	  System.out.println("updating");
@@ -305,10 +296,9 @@ public class GUI extends JFrame {
 	case"60min":
 		timeinsec=60*60;
 		break;
-	default:
-		break;
+
 	}
-	 runUpdateMonitoring(timeinsec);
+	 
   }
   
   
