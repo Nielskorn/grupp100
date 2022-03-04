@@ -12,6 +12,7 @@ import com.sun.management.OperatingSystemMXBean;
 
 import database.CPUUsage;
 import database.RAMUsage;
+import datainterpretation.DiskDriveDataAnalyser;
 import datainterpretation.DiskSpaceDataAcceptor;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
@@ -62,11 +63,7 @@ public class MonitorOfPCResorces {
 			//TODO Adding Alert 
 			DiskSpaceDataAcceptor.acceptDiskData(name, totalSpace, freeSpace);
 		}
-		//System.out.println("Total of all System drives");
-		//System.out.printf("Total space: %8.2f GB\n",totalOfTotals);
-		//System.out.printf("Free Space : %8.2f GB \n",totalOfFreeSpace);
-		//System.out.printf("Usable Space: %8.2f GB \n",totalOfUsableSpace);
-		//TODO Adding ALERT for System Arlert
+		DiskDriveDataAnalyser.analyseData();
 		
 	}
 

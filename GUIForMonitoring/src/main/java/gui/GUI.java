@@ -270,6 +270,12 @@ public class GUI extends JFrame {
 	  System.out.println("updating");
 	  getThresholds();
 	  updateDiskDrives();
+	  updateGraphs();
+  }
+  
+  private void updateGraphs() {
+	  GraphPainter.paintGraph(ramCanvas, serverConnection.getRAMUsage());
+	  GraphPainter.paintGraph(cpuCanvas, serverConnection.getCPUUsage());
   }
   
   private void differentDiskDriveChosen(String drive) {

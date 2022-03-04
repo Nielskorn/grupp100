@@ -1,8 +1,6 @@
 package servercommunication;
 
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.http.HttpEntity;
@@ -100,6 +98,38 @@ public class Communicator {
 			return response.getBody();
 		else
 			return 0.0;
+	}
+	
+	public Integer[] getRAMUsage() {
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> requestEntity = new HttpEntity<>("",headers);
+		Class<Integer[]> expectedClass = Integer[].class;
+		String method = "/database/getRAMData";
+		ResponseEntity<Integer[]> response = null;
+		try {
+			response = connector.exchange(serverUrl + method, HttpMethod.GET, requestEntity, expectedClass);
+		}catch(IllegalArgumentException e) {
+		}
+		if(response != null && response.getStatusCode().is2xxSuccessful())
+			return response.getBody();
+		else
+			return new Integer[0];
+	}
+	
+	public Integer[] getCPUUsage() {
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> requestEntity = new HttpEntity<>("",headers);
+		Class<Integer[]> expectedClass = Integer[].class;
+		String method = "/database/getCPUData";
+		ResponseEntity<Integer[]> response = null;
+		try {
+			response = connector.exchange(serverUrl + method, HttpMethod.GET, requestEntity, expectedClass);
+		}catch(IllegalArgumentException e) {
+		}
+		if(response != null && response.getStatusCode().is2xxSuccessful())
+			return response.getBody();
+		else
+			return new Integer[0];
 	}
 	
 

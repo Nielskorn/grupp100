@@ -10,6 +10,7 @@ import java.util.List;
 import database.CPUUsage;
 import database.DBController;
 import database.RAMUsage;
+import Main.Main;
 
 public class DatabasePusher {
 	
@@ -58,6 +59,18 @@ public class DatabasePusher {
 	
 	public static List<CPUUsage> getCPUUsagesLastMinute(){
 		return getCPUUsages(TIMECONDITION + "'"+getTimeOfLastMinute()+"'" );
+	}
+	
+	public static List<RAMUsage> getRAMUsagesStandardTimeFrame(){
+		return getRAMUsages(TIMECONDITION + "'"+getTimeOfStandardTimeFrame()+"'");
+	}
+	
+	public static List<CPUUsage> getCPUUsagesStandardTimeFrame(){
+		return getCPUUsages(TIMECONDITION + "'"+getTimeOfStandardTimeFrame()+"'");
+	}
+	
+	private static Timestamp getTimeOfStandardTimeFrame() {
+		return Timestamp.from(Instant.now().minus(Duration.ofSeconds(Main.MONITORINTERVAL * 1000)));
 	}
 	
 	private static Timestamp getTimeOfLastMinute () {
