@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -131,8 +134,16 @@ public class GUI extends JFrame {
 	});
     //TODO add time values
     cp.add(dataUpdateFrequencySelector);
+   
     dataUpdateFrequencyDescription.setBounds(748, 504, 200, 20);
     dataUpdateFrequencyDescription.setText("Select Data Update Frequency");
+    dataUpdateFrequencySelector.addItem("30sec");
+    dataUpdateFrequencySelector.addItem("1min");
+    dataUpdateFrequencySelector.addItem("5min");
+    dataUpdateFrequencySelector.addItem("10min");
+    dataUpdateFrequencySelector.addItem("30min");
+    dataUpdateFrequencySelector.addItem("60min");
+
     cp.add(dataUpdateFrequencyDescription);
     enterThresholdDescription.setBounds(64, 8, 160, 20);
     enterThresholdDescription.setText("Enter Threshold Value");
@@ -247,8 +258,19 @@ public class GUI extends JFrame {
         connectionErrorLabel.setText("Could not connect to the entered Url");
       }
   }
+  private  void runUpdateMonitoring(int period) {
+	 java.util.Timer timer = new java.util.Timer();
+	    timer.schedule(new java.util.TimerTask(){
+	        public void run() {
+	        	updateMonitoringScreen();
+	        	int time=period;
+	        	timer.cancel(); // cancel time
+	            runUpdateMonitoring(time);
+	        }}, 0, period);
+  }
   
   public void updateMonitoringScreen() {
+	  System.out.println("updating");
 	  getThresholds();
   }
   
@@ -260,9 +282,35 @@ public class GUI extends JFrame {
 	}
 
   }
+  
   private void differentFrequencyChosen(String item) {
 	  //TODO
+	  ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);	 
+	 int timeinsec = 0; 
+	 switch (item) {
+	case"30sec":
+		timeinsec=30;
+		break;
+	case "1min":
+		timeinsec=60;
+		break;
+	case"5min":
+		timeinsec=5*60;
+		break;
+	case"10min":
+		timeinsec=10*60;
+		break;
+	case"30min":
+		timeinsec=30*60;
+	case"60min":
+		timeinsec=60*60;
+		break;
+	default:
+		break;
+	}
+	 runUpdateMonitoring(timeinsec);
   }
+  
   
   private boolean testConnection() {
 	  try {
