@@ -5,7 +5,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import Main.MonitorOfPCResorces;
-
+/** class to create montoring thread
+ * 
+ * 
+ * */
 public class monitorThread extends Thread {
 		public void run() {
 			MonitorOfPCResorces pc = new MonitorOfPCResorces();
@@ -18,6 +21,7 @@ public class monitorThread extends Thread {
 			
 			
 		}
+		//methode to call montioring Thread in interval
 		public void runInInterval(int intervalInSeconds) {
 		monitorThread mt= new monitorThread();
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

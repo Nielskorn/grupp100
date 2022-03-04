@@ -42,7 +42,7 @@ public class DiskDriveDataAnalyser {
 	public static double getLastTotalUsage() {
 		return lastTotalUsage;
 	}
-
+//email alert creation of messages and sending regrading 
 	private static void diskTotalSoftAlert() {
 		// TODO Auto-generated method stub
 		String message;

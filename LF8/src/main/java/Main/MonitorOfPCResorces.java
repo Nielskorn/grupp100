@@ -115,7 +115,7 @@ public class MonitorOfPCResorces {
 			try {
 				cpuRead = Runtime.getRuntime().exec(cpuReadCommand);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 
 			}
