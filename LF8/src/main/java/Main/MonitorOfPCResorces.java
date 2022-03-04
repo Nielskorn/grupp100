@@ -107,7 +107,7 @@ public class MonitorOfPCResorces {
 			return CpuUsage;
 		}
 		//methode do get cpuload in windows
-	 	// über batch dartei dies funkuniert leider nicht in windows 11
+	 	// über batch dartei dies funkioniert leider nicht in windows 11
 		private int getCpuLoadWindows() {
 			String cpuUsagePercentageAsString = null;
 			Process cpuRead = null;
