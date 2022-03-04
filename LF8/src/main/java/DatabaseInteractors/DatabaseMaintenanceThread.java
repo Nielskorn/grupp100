@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
 
 import database.DBController;
 import datainterpretation.CPUUsageAnalyser;
@@ -45,7 +43,7 @@ public class DatabaseMaintenanceThread extends Thread {
 	
 	public static void deleteIrrelevantDatabaseData() {
 		// this method should delete all data older then one day before today.
-		Instant yesterday = Instant.now().minus(Duration.ofHours(24));
+		Instant yesterday = Instant.now().minus(Duration.ofHours(12));
 		try {
 			DBController.getVoid("DELETE FROM CPUUSAGE WHERE date < '"+ Timestamp.from(yesterday)+"';");
 			DBController.getVoid("DELETE FROM RAMUSAGE WHERE date < '"+ Timestamp.from(yesterday)+"';");

@@ -1,5 +1,8 @@
 package datainterpretation;
 
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 import service.EMailSenderService;
@@ -9,6 +12,7 @@ public class DiskDriveDataAnalyser {
 	static double alertValue;
 	static EMailSenderService diskSender= new EMailSenderService();
 	private static double lastTotalUsage = 0;
+	private static Timestamp lastMail;
 	
 	public static void analyseData() {
 		double totalSpace = 0;
@@ -21,6 +25,10 @@ public class DiskDriveDataAnalyser {
 		if(totalSpace == 0)
 			return;
 		lastTotalUsage = usedSpace / totalSpace *100;
+		if(lastMail != null && lastMail.after(Timestamp.from(Instant.now().minus(Duration.ofHours(3))))){
+			return;
+		}
+		lastMail = Timestamp.from(Instant.now());
 		if(lastTotalUsage > ThresholdList.getValue(ThresholdList.DISKSPACEOVERALLHARDCAP)) {
 			diskTotalHardAlert();
 			return;
@@ -32,7 +40,6 @@ public class DiskDriveDataAnalyser {
 	}
 	
 	public static double getLastTotalUsage() {
-		analyseData();
 		return lastTotalUsage;
 	}
 

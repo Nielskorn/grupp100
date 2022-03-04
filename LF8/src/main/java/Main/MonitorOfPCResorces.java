@@ -12,6 +12,7 @@ import com.sun.management.OperatingSystemMXBean;
 
 import database.CPUUsage;
 import database.RAMUsage;
+import datainterpretation.DiskDriveDataAnalyser;
 import datainterpretation.DiskSpaceDataAcceptor;
 
 /*** @author niels
@@ -57,6 +58,10 @@ public class MonitorOfPCResorces {
  
 			DiskSpaceDataAcceptor.acceptDiskData(name, totalSpace, freeSpace);
 		}
+
+		DiskDriveDataAnalyser.analyseData();
+		
+	
 
 	}
 	 // methode um infos über das betriebssystems zubekommen

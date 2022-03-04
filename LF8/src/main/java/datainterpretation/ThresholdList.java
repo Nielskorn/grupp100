@@ -1,8 +1,6 @@
 package datainterpretation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ThresholdList {
 	public static final String RAMSOFTCAP = "RAMSOFTCAP";
@@ -28,11 +26,7 @@ public class ThresholdList {
 	}
 	
 	public static double getValue(String thresholdName) {
-		return getThreshold(thresholdName).value;
-	}
-	
-	private static Threshold getThreshold(String thresholdName) {
-		return new Threshold(thresholdName,thresholds.get(thresholdName));
+		return thresholds.get(thresholdName);
 	}
 	
 	public static void changeValue(String thresholdName, double newValue) {
